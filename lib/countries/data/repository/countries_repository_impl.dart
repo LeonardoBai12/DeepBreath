@@ -1,3 +1,5 @@
+import 'package:deepbreath/countries/data/remote/country_result.dart';
+
 import '../../domain/model/country.dart';
 import '../../domain/repository/countries_repository.dart';
 import '../remote/countries_remote_data_source.dart';
@@ -8,10 +10,16 @@ class CountriesRepositoryImpl implements CountriesRepository {
 
   @override
   Future<List<Country>> getCountries() async {
-    return _dataSource.getCountries();
+    List<CountryResult> result = await _dataSource.getCountries();
+    return result.map((result) => Country.fromCountryResult(result)).toList();
   }
+
   @override
   Future<Country?> getCountryDetails(String code) async {
-    return _dataSource.getCountryDetails(code);
+    CountryResult? result = await _dataSource.getCountryDetails(code);
+    if (result == null) {
+      return null;
+    }
+    return Country.fromCountryResult(result);
   }
 }

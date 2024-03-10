@@ -1,6 +1,6 @@
 import 'package:deepbreath/countries/domain/model/country.dart';
+import 'package:flutter/foundation.dart';
 import '../repository/countries_repository.dart';
-import 'dart:html';
 
 class GetCountriesUseCase {
   final CountriesRepository _repository;
@@ -11,7 +11,9 @@ class GetCountriesUseCase {
     try {
       result = await _repository.getCountries();
     } on Exception  catch (e) {
-      window.console.error("Couldn't get countries. Error: \n $e");
+      if (kDebugMode) {
+        print("Couldn't get countries. Error: \n $e");
+      }
       result = List.empty();
     }
 

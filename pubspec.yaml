@@ -13,6 +13,7 @@ dependencies:
   geolocator: ^11.0.0
   get: ^4.6.6
   http: ^1.2.0
+  flag: ^7.0.0
 
 dev_dependencies:
   flutter_test:

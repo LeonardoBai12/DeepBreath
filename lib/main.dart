@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+
+import 'countries/di/countries_binding.dart';
+import 'countries/presentation/countries_controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,7 +14,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
+      initialBinding: CountriesBinding(),
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -29,11 +35,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  late final CountriesController _countriesController;
+
+  @override
+  void initState() {
+    super.initState();
+    _countriesController = Get.find<CountriesController>();
+  }
 
   void _incrementCounter() {
     setState(() {
-      _counter++;
+      _countriesController.getCountries();
     });
   }
 
@@ -52,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_counter',
+              'Hello',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],

@@ -6,15 +6,7 @@ class CountriesController extends GetxController {
   final CountriesUseCases _useCases;
   CountriesController(this._useCases);
 
-  void getCountries() async {
-    List<Country> result = await _useCases.getCountriesUseCase.execute();
-
-    for (final country in result) {
-      print('''code ${country.code} 
-      name ${country.name}
-      lastUpdated ${country.lastUpdated}''');
-    }
-
-    print(result.length);
+  Future<List<Country>> getCountries() async {
+    return await _useCases.getCountriesUseCase.execute();
   }
 }

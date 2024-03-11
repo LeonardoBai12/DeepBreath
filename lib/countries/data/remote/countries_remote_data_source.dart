@@ -13,7 +13,10 @@ class CountriesRemoteDataSource {
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body)['results'];
-      return data.map((json) => CountryResult.fromJson(json)).toList();
+      final List<CountryResult> result = data.map((json) => CountryResult.fromJson(json))
+          .toList();
+      result.sort((a, b) => a.name.compareTo(b.name));
+      return result;
     } else {
       throw Exception('Failed to load countries');
     }

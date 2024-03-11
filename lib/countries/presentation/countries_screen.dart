@@ -1,5 +1,4 @@
 import 'package:flag/flag_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -26,13 +25,6 @@ class _CountriesScreenState extends State<CountriesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme
-            .of(context)
-            .colorScheme
-            .primary,
-        title: const Text(""),
-      ),
       body: Center(
           child: Expanded(
               child: FutureBuilder<List<Country>>(

@@ -1,5 +1,6 @@
 import 'package:deepbreath/countries/utils/countries_constants.dart';
 
+import '../../../utils/constants.dart';
 import 'country_result.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -7,7 +8,7 @@ import 'package:http/http.dart' as http;
 class CountriesRemoteDataSource {
   Future<List<CountryResult>> getCountries() async {
     final response = await http.get(Uri.parse(
-        CountriesConstants.baseUrl + CountriesConstants.countriesEndpoint
+        Constants.baseUrl + CountriesConstants.countriesEndpoint
     ));
 
     if (response.statusCode == 200) {

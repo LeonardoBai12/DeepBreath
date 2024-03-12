@@ -1,4 +1,4 @@
-import '../../data/remote/country_result.dart';
+import '../../data/remote/country_response.dart';
 
 class Country {
   String code;
@@ -11,7 +11,7 @@ class Country {
     required this.lastUpdated,
   });
 
-  factory Country.fromCountryResult(CountryResult countryResult) {
+  factory Country.fromCountryResult(CountryResponse countryResult) {
     return Country(
       code: countryResult.code,
       name: countryResult.name,

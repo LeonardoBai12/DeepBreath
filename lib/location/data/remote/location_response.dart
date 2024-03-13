@@ -4,6 +4,7 @@ import 'package:deepbreath/location/data/remote/sensor_result.dart';
 import 'date_time_response.dart';
 
 class LocationResponse {
+  int id;
   String name;
   String timezone;
   NamedResponse owner;
@@ -13,6 +14,7 @@ class LocationResponse {
   DateTimeResponse datetimeLast;
 
   LocationResponse({
+    required this.id,
     required this.name,
     required this.timezone,
     required this.owner,
@@ -24,6 +26,7 @@ class LocationResponse {
 
   factory LocationResponse.fromJson(Map<String, dynamic> json) {
     return LocationResponse(
+      id: json['id'],
       name: json['name'],
       timezone: json['timezone'],
       owner: NamedResponse.fromJson(json['owner']),

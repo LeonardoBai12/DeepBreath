@@ -11,7 +11,7 @@ class CountriesRepositoryImpl implements CountriesRepository {
   @override
   Future<List<Country>> getCountries() async {
     List<CountryResponse> result = await _dataSource.getCountries();
-    return result.map((result) => Country.fromCountryResult(result)).toList();
+    return result.map((result) => Country.fromCountryResponse(result)).toList();
   }
 
   @override
@@ -20,6 +20,6 @@ class CountriesRepositoryImpl implements CountriesRepository {
     if (result == null) {
       return null;
     }
-    return Country.fromCountryResult(result);
+    return Country.fromCountryResponse(result);
   }
 }

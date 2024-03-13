@@ -11,11 +11,11 @@ class Country {
     required this.lastUpdated,
   });
 
-  factory Country.fromCountryResult(CountryResponse countryResult) {
+  factory Country.fromCountryResponse(CountryResponse response) {
     return Country(
-      code: countryResult.code,
-      name: countryResult.name,
-      lastUpdated: countryResult.lastUpdated,
+      code: response.code,
+      name: response.name,
+      lastUpdated: response.lastUpdated,
     );
   }
 }

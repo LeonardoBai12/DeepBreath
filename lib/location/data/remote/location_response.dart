@@ -32,7 +32,7 @@ class LocationResponse {
       owner: NamedResponse.fromJson(json['owner']),
       provider: NamedResponse.fromJson(json['provider']),
       instruments: List<NamedResponse>.from(
-          json['instruments'].map((x) =>NamedResponse.fromJson(x))
+          json['instruments'].map((x) => NamedResponse.fromJson(x))
       ),
       sensors:  List<SensorResponse>.from(
           json['sensors'].map((x) => SensorResponse.fromJson(x))

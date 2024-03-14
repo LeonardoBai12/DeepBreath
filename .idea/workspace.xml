@@ -6,10 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="b73168ad-cdba-448f-a89b-b4da5f802c0f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/countries/data/remote/country_response.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/countries/data/remote/country_response.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/countries/domain/model/country.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/countries/domain/model/country.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/location/data/remote/location_response.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/data/remote/location_response.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/location/data/remote/parameter_response.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/data/remote/parameter_response.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/domain/model/location.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/domain/model/location.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/domain/model/parameter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/domain/model/parameter.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

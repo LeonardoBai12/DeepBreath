@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b73168ad-cdba-448f-a89b-b4da5f802c0f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/location/presentation/location_controller.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/location/di/location_binding.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/di/location_binding.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/location/presentation/location_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/data/remote/location_remote_data_source.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/data/remote/location_remote_data_source.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,5 +67,16 @@
       <updated>1710100749598</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/location/data/remote/location_remote_data_source.dart</url>
+          <line>16</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

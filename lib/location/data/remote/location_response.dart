@@ -37,7 +37,7 @@ class LocationResponse {
       sensors:  List<SensorResponse>.from(
           json['sensors'].map((x) => SensorResponse.fromJson(x))
       ),
-      datetimeLast: json['datetimeLast'],
+      datetimeLast: DateTimeResponse.fromJson(json['datetimeLast']),
     );
   }
 }

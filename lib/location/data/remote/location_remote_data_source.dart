@@ -14,7 +14,6 @@ class LocationRemoteDataSource {
           '${Constants.baseUrl}${LocationConstants.locationEndpoint}?countries_id=$countryId'
       ));
 
-
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
 

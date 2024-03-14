@@ -1,16 +1,19 @@
-class CountryResult {
+class CountryResponse {
+  int id;
   String code;
   String name;
   String lastUpdated;
 
-  CountryResult({
+  CountryResponse({
+    required this.id,
     required this.code,
     required this.name,
     required this.lastUpdated,
   });
 
-  factory CountryResult.fromJson(Map<String, dynamic> json) {
-    return CountryResult(
+  factory CountryResponse.fromJson(Map<String, dynamic> json) {
+    return CountryResponse(
+      id: json['id'],
       code: json['code'],
       name: json['name'],
       lastUpdated: json['datetimeLast'],

@@ -6,8 +6,25 @@
   <component name="ChangeListManager">
     <list default="true" id="b73168ad-cdba-448f-a89b-b4da5f802c0f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/countries/presentation/countries_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/countries/presentation/countries_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/countries/data/remote/countries_remote_data_source.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/countries/data/remote/countries_remote_data_source.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/countries/data/remote/country_response.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/countries/data/remote/country_response.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/countries/domain/model/country.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/countries/domain/model/country.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/data/remote/date_time_response.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/data/remote/location_remote_data_source.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/data/remote/location_remote_data_source.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/data/remote/location_response.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/data/remote/location_response.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/data/remote/named_response.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/data/remote/parameter_response.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/data/remote/parameter_response.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/data/remote/sensor_result.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/data/remote/manufacturer_result.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/data/repository/location_repository_impl.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/data/repository/location_repository_impl.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/domain/model/location.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/domain/model/location.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/domain/model/parameter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/domain/model/parameter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/domain/repository/location_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/domain/repository/location_repository.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/domain/use_cases/get_location_by_country_id_use_case.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/domain/use_cases/get_location_by_country_id_use_case.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/domain/use_cases/location_use_cases.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/domain/use_cases/location_use_cases.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/presentation/location_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/presentation/location_controller.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/presentation/location_details_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/presentation/location_details_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/location/presentation/location_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/presentation/location_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/utils/constants.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utils/constants.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,5 +83,36 @@
       <updated>1710100749598</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/location/data/remote/location_remote_data_source.dart</url>
+          <line>29</line>
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/location/data/remote/location_remote_data_source.dart</url>
+          <line>32</line>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/location/data/remote/location_remote_data_source.dart</url>
+          <line>35</line>
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/location/data/remote/location_remote_data_source.dart</url>
+          <line>21</line>
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/location/data/remote/location_remote_data_source.dart</url>
+          <line>18</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

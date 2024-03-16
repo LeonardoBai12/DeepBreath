@@ -7,7 +7,7 @@ class LocationController extends GetxController {
   final LocationUseCases _useCases;
   LocationController(this._useCases);
 
-  Future<List<Location>> getLocationByCountryById(int countryId) async {
-    return await _useCases.getLocationByCountryByIdUseCase.execute(countryId);
+  Future<List<Location>> getLocationByCountryByCode(String code) async {
+    return await _useCases.getLocationByCountryByCodeUseCase.execute(code);
   }
 }

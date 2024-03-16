@@ -17,7 +17,7 @@ class Parameter {
     return Parameter(
       id: response.id,
       name: response.name,
-      units: response.units,
+      units: response.unit,
       displayName: response.displayName,
     );
   }

@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 class CountriesRemoteDataSource {
   Future<List<CountryResponse>> getCountries() async {
     final response = await http.get(Uri.parse(
-        Constants.baseUrl + CountriesConstants.countriesEndpoint
+        Constants.baseUrlV2 + CountriesConstants.countriesEndpoint
     ));
 
     if (response.statusCode == 200) {

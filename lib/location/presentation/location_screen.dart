@@ -72,8 +72,9 @@ class _LocationScreenState extends State<LocationScreen> {
               Padding(
                   padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
                   child: FutureBuilder<List<Location>>(
-                    future: _locationController.getLocationByCountryById(
-                        _country.id),
+                    future: _locationController.getLocationByCountryByCode(
+                        _country.code
+                    ),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(
@@ -119,7 +120,8 @@ class _LocationScreenState extends State<LocationScreen> {
                                                 ),
                                                 Text(
                                                   transformDateFormat(
-                                                      location.datetimeLast),
+                                                      location.lastUpdated
+                                                  ),
                                                   textAlign: TextAlign.start,
                                                 ),
                                               ],

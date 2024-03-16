@@ -2,6 +2,8 @@ import 'package:deepbreath/location/domain/model/location.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../domain/model/parameter.dart';
+
 class LocationDetailsScreen extends StatefulWidget {
   const LocationDetailsScreen({super.key});
 
@@ -36,6 +38,15 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
             Text(_location.name),
             Text(_location.name),
             Text(_location.name),
+            ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: _location.parameters.length,
+                itemBuilder: (context, index) {
+                  Parameter parameter = _location.parameters[index];
+                  return Text(parameter.displayName);
+                }
+            )
           ],
         ),
       ),

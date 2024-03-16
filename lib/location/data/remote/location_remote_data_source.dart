@@ -6,15 +6,13 @@ import 'package:deepbreath/utils/constants.dart';
 import 'package:http/http.dart' as http;
 
 class LocationRemoteDataSource {
-  final String baseUrl = 'https://api.openaq.org/v3/locations';
-
-  Future<List<LocationResponse>> getLocationsByCountryId(int countryId) async {
+  Future<List<LocationResponse>> getLocationsByCountryByCode(String code) async {
     try {
       final response = await http.get(
           Uri.parse(
-              "${Constants.baseUrl}"
+              "${Constants.baseUrlV2}"
                   "${LocationConstants.locationEndpoint}"
-                  "?countries_id=$countryId"
+                  "?country=$code"
           )
       );
 
@@ -24,7 +22,8 @@ class LocationRemoteDataSource {
         if (jsonData['results'] != null) {
           List<LocationResponse> locations = List<LocationResponse>.from(
             jsonData['results'].map((result) =>
-                LocationResponse.fromJson(result)),
+                LocationResponse.fromJson(result)
+            ),
           );
           return locations;
         } else {

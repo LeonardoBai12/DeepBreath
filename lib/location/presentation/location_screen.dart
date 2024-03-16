@@ -43,80 +43,97 @@ class _LocationScreenState extends State<LocationScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
-              child:
-              Hero(
-                tag: _country,
-                child: Flag.fromString(
-                  _country.code,
-                  height: 120,
-                  width: 180,
-                  borderRadius: 24,
-                ),
-              ),
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+                child: Row(
+                    children: [
+                      Hero(
+                        tag: _country,
+                        child: Flag.fromString(
+                          _country.code,
+                          height: 80,
+                          width: 140,
+                          borderRadius: 12,
+                        ),
+                      ),
+                      Flexible(
+                          child: Text(
+                            _country.name,
+                            style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold
+                            ),
+                          )
+                      )
+                    ]
+                )
             ),
             Expanded(
-              child: FutureBuilder<List<Location>>(
-                future: _locationController.getLocationByCountryById(
-                    _country.id),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.hasError || snapshot.data == null) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    List<Location> locations = snapshot.data!;
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: locations.length,
-                      itemBuilder: (context, index) {
-                        Location location = locations[index];
-                        return GestureDetector(
-                            onTap: () {
-                              Get.toNamed("/location_details_screen",
-                                  arguments: {
-                                    "location": location
-                                  });
-                            },
-                            child: Card(
-                                child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
-                                      children: [
-                                        Text(
-                                          location.name,
-                                          textAlign: TextAlign.start,
-                                        ),
-                                        Row(
+              child:
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
+                  child: FutureBuilder<List<Location>>(
+                    future: _locationController.getLocationByCountryById(
+                        _country.id),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (snapshot.hasError || snapshot.data == null) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        List<Location> locations = snapshot.data!;
+                        return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: locations.length,
+                          itemBuilder: (context, index) {
+                            Location location = locations[index];
+                            return GestureDetector(
+                                onTap: () {
+                                  Get.toNamed("/location_details_screen",
+                                      arguments: {
+                                        "location": location
+                                      });
+                                },
+                                child: Card(
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment
+                                              .start,
                                           children: [
-                                            const Text(
-                                              "Last time updated: ",
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
                                             Text(
-                                              transformDateFormat(
-                                                  location.datetimeLast),
+                                              location.name,
                                               textAlign: TextAlign.start,
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Text(
+                                                  "Last time updated: ",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight
+                                                          .bold
+                                                  ),
+                                                ),
+                                                Text(
+                                                  transformDateFormat(
+                                                      location.datetimeLast),
+                                                  textAlign: TextAlign.start,
+                                                ),
+                                              ],
                                             ),
                                           ],
-                                        ),
-                                      ],
+                                        )
                                     )
                                 )
-                            )
+                            );
+                          },
                         );
-                      },
-                    );
-                  }
-                },
+                      }
+                    },
+                  )
               ),
             ),
           ],

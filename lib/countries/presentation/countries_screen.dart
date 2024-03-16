@@ -52,9 +52,14 @@ class _CountriesScreenState extends State<CountriesScreen> {
                               children: [
                                 const Text(
                                     "No flag found on ISO 3166-1 alpha2 :(",
-                                    style: TextStyle(fontWeight: FontWeight.bold)
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold
+                                    )
                                 ),
-                                Text(country.name),
+                                Text(
+                                  country.name,
+                                  textAlign: TextAlign.center,
+                                )
                               ],
                             );
                           }
@@ -68,16 +73,24 @@ class _CountriesScreenState extends State<CountriesScreen> {
                               },
                               child: Column(
                                 children: [
-                                  Hero(
-                                      tag: country,
-                                      child: Flag.fromString(
-                                        country.code,
-                                        height: 60,
-                                        width: 90,
-                                        borderRadius: 12,
+                                  Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 0, 0, 6
+                                      ),
+                                      child: Hero(
+                                          tag: country,
+                                          child: Flag.fromString(
+                                            country.code,
+                                            height: 60,
+                                            width: 90,
+                                            borderRadius: 12,
+                                          )
                                       )
                                   ),
-                                  Text(country.name),
+                                  Text(
+                                    country.name,
+                                    textAlign: TextAlign.center,
+                                  )
                                 ],
                               )
                           );

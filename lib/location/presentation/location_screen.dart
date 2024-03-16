@@ -107,7 +107,28 @@ class _LocationScreenState extends State<LocationScreen> {
                                             Text(
                                               location.name,
                                               textAlign: TextAlign.start,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold
+                                              ),
                                             ),
+                                            location.city != null ?
+                                            Row(
+                                                children: [
+                                                  const Text(
+                                                    "City: ",
+                                                    textAlign: TextAlign.start,
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight
+                                                            .w600
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    location.city!,
+                                                    textAlign: TextAlign.start,
+                                                  )
+                                                ]
+                                            ) : const SizedBox(),
                                             Row(
                                               children: [
                                                 const Text(
@@ -115,7 +136,7 @@ class _LocationScreenState extends State<LocationScreen> {
                                                   textAlign: TextAlign.start,
                                                   style: TextStyle(
                                                       fontWeight: FontWeight
-                                                          .bold
+                                                          .w600
                                                   ),
                                                 ),
                                                 Text(

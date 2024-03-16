@@ -2,7 +2,6 @@ import 'package:deepbreath/location/presentation/location_screen.dart';
 import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../domain/model/country.dart';
 import 'countries_controller.dart';
@@ -26,6 +25,12 @@ class _CountriesScreenState extends State<CountriesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+            "DeepBreath",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
       body: Center(
           child: Expanded(
               child: FutureBuilder<List<Country>>(

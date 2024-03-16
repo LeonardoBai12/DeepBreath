@@ -10,16 +10,21 @@ class LocationRemoteDataSource {
 
   Future<List<LocationResponse>> getLocationsByCountryId(int countryId) async {
     try {
-      final response = await http.get(Uri.parse(
-          '${Constants.baseUrl}${LocationConstants.locationEndpoint}?countries_id=$countryId'
-      ));
+      final response = await http.get(
+          Uri.parse(
+              "${Constants.baseUrl}"
+                  "${LocationConstants.locationEndpoint}"
+                  "?countries_id=$countryId"
+          )
+      );
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body);
+        final jsonData = json.decode(utf8.decode(response.bodyBytes));
 
         if (jsonData['results'] != null) {
           List<LocationResponse> locations = List<LocationResponse>.from(
-            jsonData['results'].map((result) => LocationResponse.fromJson(result)),
+            jsonData['results'].map((result) =>
+                LocationResponse.fromJson(result)),
           );
           return locations;
         } else {

@@ -1,7 +1,12 @@
+import 'dart:ui';
+
+import 'package:deepbreath/countries/domain/model/country.dart';
+import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../domain/model/location.dart';
+import '../util/string_helper.dart';
 import 'location_controller.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -13,43 +18,109 @@ class LocationScreen extends StatefulWidget {
 
 class _LocationScreenState extends State<LocationScreen> {
   late final LocationController _locationController;
+  late final Country _country;
 
   @override
   void initState() {
     super.initState();
     _locationController = Get.find<LocationController>();
+    _country = Get.arguments["country"];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: Center(
-          child: Expanded(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+              child:
+              Hero(
+                tag: _country,
+                child: Flag.fromString(
+                  _country.code,
+                  height: 120,
+                  width: 180,
+                  borderRadius: 24,
+                ),
+              ),
+            ),
+            Expanded(
               child: FutureBuilder<List<Location>>(
-                  future: _locationController.getLocationByCountryById(45),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasError || snapshot.data == null) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      List<Location> locations = snapshot.data!;
-                      return ListView.builder(
-                        itemCount: locations.length,
-                        itemBuilder: (context, index) {
-                          Location location = locations[index];
-                          return Column(
-                            children: [
-                              Text(location.name),
-                              Text(location.datetimeLast),
-                            ],
-                          );
-                        },
-                      );
-                    }
+                future: _locationController.getLocationByCountryById(
+                    _country.id),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError || snapshot.data == null) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    List<Location> locations = snapshot.data!;
+                    return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: locations.length,
+                      itemBuilder: (context, index) {
+                        Location location = locations[index];
+                        return GestureDetector(
+                            onTap: () {
+                              Get.toNamed("/location_details_screen",
+                                  arguments: {
+                                    "location": location
+                                  });
+                            },
+                            child: Card(
+                                child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .start,
+                                      children: [
+                                        Text(
+                                          location.name,
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        Row(
+                                          children: [
+                                            const Text(
+                                              "Last time updated: ",
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold
+                                              ),
+                                            ),
+                                            Text(
+                                              transformDateFormat(
+                                                  location.datetimeLast),
+                                              textAlign: TextAlign.start,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    )
+                                )
+                            )
+                        );
+                      },
+                    );
                   }
-              )
-          )
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

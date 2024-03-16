@@ -1,3 +1,4 @@
+import 'package:deepbreath/location/presentation/location_screen.dart';
 import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -58,16 +59,27 @@ class _CountriesScreenState extends State<CountriesScreen> {
                             );
                           }
 
-                          return Column(
-                            children: [
-                              Flag.fromString(
-                                country.code,
-                                height: 60,
-                                width: 90,
-                                borderRadius: 12,
-                              ),
-                              Text(country.name),
-                            ],
+                          return GestureDetector(
+                              onTap: () {
+                                Get.toNamed("/location_screen",
+                                    arguments: {
+                                      "country": country
+                                    });
+                              },
+                              child: Column(
+                                children: [
+                                  Hero(
+                                      tag: country,
+                                      child: Flag.fromString(
+                                        country.code,
+                                        height: 60,
+                                        width: 90,
+                                        borderRadius: 12,
+                                      )
+                                  ),
+                                  Text(country.name),
+                                ],
+                              )
                           );
                         },
                       );

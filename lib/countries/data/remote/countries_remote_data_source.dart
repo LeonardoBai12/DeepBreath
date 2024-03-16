@@ -12,11 +12,18 @@ class CountriesRemoteDataSource {
     ));
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body)['results'];
-      final List<CountryResponse> result = data.map((json) => CountryResponse.fromJson(json))
-          .toList();
-      result.sort((a, b) => a.name.compareTo(b.name));
-      return result;
+      final jsonData = json.decode(utf8.decode(response.bodyBytes));
+
+      if (jsonData['results'] != null) {
+        List<CountryResponse> countries = List<CountryResponse>.from(
+          jsonData['results'].map((result) =>
+              CountryResponse.fromJson(result)),
+        );
+        countries.sort((a, b) => a.name.compareTo(b.name));
+        return countries;
+      } else {
+        throw Exception('Invalid JSON format or missing "results" key');
+      }
     } else {
       throw Exception('Failed to load countries');
     }

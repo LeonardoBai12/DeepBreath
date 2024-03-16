@@ -31,25 +31,33 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
           },
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(_location.name),
-            Text(_location.name),
-            Text(_location.name),
+            Text(
+              _location.name,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24
+              ),
+            ),
             ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: _location.parameters.length,
                 itemBuilder: (context, index) {
                   Parameter parameter = _location.parameters[index];
-                  return Text(parameter.displayName);
+                  return Column(
+                    children: [
+                      Text(parameter.name),
+                      Text(parameter.displayName),
+                    ],
+                  );
                 }
             )
           ],
         ),
-      ),
     );
   }
 }

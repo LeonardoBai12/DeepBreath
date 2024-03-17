@@ -7,10 +7,10 @@ class GetLocationByCountryByIdUseCase {
   final LocationRepository _repository;
   GetLocationByCountryByIdUseCase(this._repository);
 
-  Future<List<Location>> execute(int countryId) async {
+  Future<List<Location>> execute(String code) async {
     List<Location> result;
     try {
-      result = await _repository.getLocationByCountryId(countryId);
+      result = await _repository.getLocationByCountryCode(code);
     } on Exception  catch (e) {
       if (kDebugMode) {
         print("Couldn't get locations. Error: \n $e");

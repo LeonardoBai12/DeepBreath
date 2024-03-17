@@ -10,8 +10,8 @@ class LocationRepositoryImpl implements LocationRepository {
   LocationRepositoryImpl(this._dataSource);
 
   @override
-  Future<List<Location>> getLocationByCountryId(int countryId) async {
-    List<LocationResponse> result = await _dataSource.getLocationsByCountryId(countryId);
+  Future<List<Location>> getLocationByCountryCode(String code) async {
+    List<LocationResponse> result = await _dataSource.getLocationsByCountryByCode(code);
     return result.map((result) => Location.fromLocationResponse(result)).toList();
   }
 }

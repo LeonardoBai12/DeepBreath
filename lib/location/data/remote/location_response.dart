@@ -1,43 +1,35 @@
-import 'package:deepbreath/location/data/remote/named_response.dart';
-import 'package:deepbreath/location/data/remote/sensor_result.dart';
-
-import 'date_time_response.dart';
+import 'package:deepbreath/location/data/remote/manufacturer_result.dart';
+import 'package:deepbreath/location/data/remote/parameter_response.dart';
 
 class LocationResponse {
   int id;
-  String name;
-  String timezone;
-  NamedResponse owner;
-  NamedResponse provider;
-  List<NamedResponse> instruments;
-  List<SensorResponse> sensors;
-  DateTimeResponse datetimeLast;
+  String? name;
+  String? city;
+  List<ParameterResponse> parameters;
+  List<ManufacturerResponse> manufacturers;
+  String lastUpdated;
 
   LocationResponse({
     required this.id,
     required this.name,
-    required this.timezone,
-    required this.owner,
-    required this.provider,
-    required this.instruments,
-    required this.sensors,
-    required this.datetimeLast,
+    required this.city,
+    required this.parameters,
+    required this.manufacturers,
+    required this.lastUpdated,
   });
 
   factory LocationResponse.fromJson(Map<String, dynamic> json) {
     return LocationResponse(
       id: json['id'],
       name: json['name'],
-      timezone: json['timezone'],
-      owner: NamedResponse.fromJson(json['owner']),
-      provider: NamedResponse.fromJson(json['provider']),
-      instruments: List<NamedResponse>.from(
-          json['instruments'].map((x) => NamedResponse.fromJson(x))
+      city: json['city'],
+      parameters: List<ParameterResponse>.from(
+          json['parameters'].map((x) => ParameterResponse.fromJson(x))
       ),
-      sensors:  List<SensorResponse>.from(
-          json['sensors'].map((x) => SensorResponse.fromJson(x))
+      manufacturers:  List<ManufacturerResponse>.from(
+          json['manufacturers'].map((x) => ManufacturerResponse.fromJson(x))
       ),
-      datetimeLast: DateTimeResponse.fromJson(json['datetimeLast']),
+      lastUpdated: json['lastUpdated']
     );
   }
 }

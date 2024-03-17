@@ -1,7 +1,7 @@
+import 'package:deepbreath/location/presentation/location_screen.dart';
 import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../domain/model/country.dart';
 import 'countries_controller.dart';
@@ -25,6 +25,12 @@ class _CountriesScreenState extends State<CountriesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "DeepBreath",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
       body: Center(
           child: Expanded(
               child: FutureBuilder<List<Country>>(
@@ -51,23 +57,50 @@ class _CountriesScreenState extends State<CountriesScreen> {
                               children: [
                                 const Text(
                                     "No flag found on ISO 3166-1 alpha2 :(",
-                                    style: TextStyle(fontWeight: FontWeight.bold)
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold
+                                    )
                                 ),
-                                Text(country.name),
+                                Text(
+                                  country.name,
+                                  textAlign: TextAlign.center,
+                                )
                               ],
                             );
                           }
 
-                          return Column(
-                            children: [
-                              Flag.fromString(
-                                country.code,
-                                height: 60,
-                                width: 90,
-                                borderRadius: 12,
-                              ),
-                              Text(country.name),
-                            ],
+                          return GestureDetector(
+                              onTap: () {
+                                Get.toNamed("/location_screen",
+                                    arguments: {
+                                      "country": country
+                                    });
+                              },
+                              child: Column(
+                                children: [
+                                  Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 0, 0, 6
+                                      ),
+                                      child: Hero(
+                                          tag: country,
+                                          child: Flag.fromString(
+                                            country.code,
+                                            height: 60,
+                                            width: 90,
+                                            borderRadius: 12,
+                                          )
+                                      )
+                                  ),
+                                  Text(
+                                      country.name,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                      )
+                                  )
+                                ],
+                              )
                           );
                         },
                       );

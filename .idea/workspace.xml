@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b73168ad-cdba-448f-a89b-b4da5f802c0f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/location/presentation/location_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/location/data/remote/location_remote_data_source.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/data/remote/location_remote_data_source.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/data/remote/location_response.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/data/remote/location_response.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/data/remote/parameter_response.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/data/remote/parameter_response.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/domain/model/location.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/domain/model/location.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/domain/model/parameter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/domain/model/parameter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/presentation/location_details_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/presentation/location_details_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/location/presentation/location_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/location/presentation/location_screen.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,8 +81,28 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/lib/location/data/remote/location_remote_data_source.dart</url>
-          <line>16</line>
-          <option name="timeStamp" value="2" />
+          <line>29</line>
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/location/data/remote/location_remote_data_source.dart</url>
+          <line>32</line>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/location/data/remote/location_remote_data_source.dart</url>
+          <line>35</line>
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/location/data/remote/location_remote_data_source.dart</url>
+          <line>21</line>
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/location/data/remote/location_remote_data_source.dart</url>
+          <line>18</line>
+          <option name="timeStamp" value="30" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

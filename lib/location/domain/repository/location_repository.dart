@@ -1,5 +1,5 @@
 import '../model/location.dart';
 
 abstract class LocationRepository {
-  Future<List<Location>> getLocationByCountryId(int countryId);
+  Future<List<Location>> getLocationByCountryCode(String code);
 }

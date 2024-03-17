@@ -4,40 +4,35 @@ import 'package:deepbreath/location/domain/model/parameter.dart';
 class Location {
   int id;
   String name;
-  String timezone;
-  String owner;
-  String provider;
-  List<String> instruments;
-  List<Parameter> sensors;
-  String datetimeLast;
+  String? city;
+  String sensorManufacturer;
+  String sensorModel;
+  List<Parameter> parameters;
+  String lastUpdated;
 
   Location({
     required this.id,
     required this.name,
-    required this.timezone,
-    required this.owner,
-    required this.provider,
-    required this.instruments,
-    required this.sensors,
-    required this.datetimeLast,
+    required this.city,
+    required this.sensorManufacturer,
+    required this.sensorModel,
+    required this.parameters,
+    required this.lastUpdated,
   });
 
   factory Location.fromLocationResponse(LocationResponse response) {
     return Location(
         id: response.id,
-        name: response.name,
-        timezone: response.timezone,
-        owner: response.owner.name,
-        provider: response.provider.name,
-        instruments: List<String>.from(
-          response.instruments.map((x) => x.name)
-        ),
-        sensors: List<Parameter>.from(
-          response.sensors.map((x) =>
-              Parameter.fromParameterResponse(x.parameter)
+        name: response.name ?? "",
+        city: response.city,
+        sensorManufacturer: response.manufacturers.first.manufacturerName,
+        sensorModel: response.manufacturers.first.modelName,
+        parameters: List<Parameter>.from(
+          response.parameters.map((x) =>
+            Parameter.fromParameterResponse(x)
           )
         ),
-        datetimeLast: response.datetimeLast.local
+        lastUpdated: response.lastUpdated
     );
   }
 }

@@ -1,7 +1,12 @@
+import 'dart:ui';
+
+import 'package:deepbreath/countries/domain/model/country.dart';
+import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../domain/model/location.dart';
+import '../util/string_helper.dart';
 import 'location_controller.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -13,43 +18,139 @@ class LocationScreen extends StatefulWidget {
 
 class _LocationScreenState extends State<LocationScreen> {
   late final LocationController _locationController;
+  late final Country _country;
 
   @override
   void initState() {
     super.initState();
     _locationController = Get.find<LocationController>();
+    _country = Get.arguments["country"];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: Expanded(
-              child: FutureBuilder<List<Location>>(
-                  future: _locationController.getLocationByCountryById(45),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasError || snapshot.data == null) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      List<Location> locations = snapshot.data!;
-                      return ListView.builder(
-                        itemCount: locations.length,
-                        itemBuilder: (context, index) {
-                          Location location = locations[index];
-                          return Column(
-                            children: [
-                              Text(location.name),
-                              Text(location.datetimeLast),
-                            ],
-                          );
-                        },
-                      );
-                    }
-                  }
+      appBar: AppBar(
+        title: Row(
+            children: [
+              Hero(
+                tag: _country,
+                child: Flag.fromString(
+                  _country.code,
+                  height: 30,
+                  width: 60,
+                  borderRadius: 8,
+                ),
+              ),
+              Flexible(
+                  child: Text(
+                    _country.name,
+                    style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold
+                    ),
+                  )
               )
-          )
+            ]
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+      body: Expanded(
+        child:
+        Padding(
+            padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
+            child: FutureBuilder<List<Location>>(
+              future: _locationController.getLocationByCountryByCode(
+                  _country.code
+              ),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError || snapshot.data == null) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  List<Location> locations = snapshot.data!;
+                  return ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: locations.length,
+                    itemBuilder: (context, index) {
+                      Location location = locations[index];
+                      return GestureDetector(
+                          onTap: () {
+                            Get.toNamed("/location_details_screen",
+                                arguments: {
+                                  "location": location
+                                });
+                          },
+                          child: Card(
+                              child: Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start,
+                                    children: [
+                                      Text(
+                                        location.name,
+                                        textAlign: TextAlign.start,
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold
+                                        ),
+                                      ),
+                                      location.city != null ?
+                                      Row(
+                                          children: [
+                                            const Text(
+                                              "City: ",
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight
+                                                      .w600
+                                              ),
+                                            ),
+                                            Text(
+                                              location.city!,
+                                              textAlign: TextAlign.start,
+                                            )
+                                          ]
+                                      ) : const SizedBox(),
+                                      Row(
+                                        children: [
+                                          const Text(
+                                            "Last time updated: ",
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight
+                                                    .w600
+                                            ),
+                                          ),
+                                          Text(
+                                            transformDateFormat(
+                                                location.lastUpdated
+                                            ),
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  )
+                              )
+                          )
+                      );
+                    },
+                  );
+                }
+              },
+            )
+        ),
       ),
     );
   }

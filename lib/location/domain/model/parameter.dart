@@ -7,6 +7,7 @@ class Parameter {
   String displayName;
   double average;
   double lastValue;
+  String lastUpdated;
 
   Parameter({
     required this.id,
@@ -15,6 +16,7 @@ class Parameter {
     required this.displayName,
     required this.average,
     required this.lastValue,
+    required this.lastUpdated,
   });
 
   factory Parameter.fromParameterResponse(ParameterResponse response) {
@@ -25,6 +27,7 @@ class Parameter {
       displayName: response.displayName,
       average: response.average,
       lastValue: response.lastValue,
+      lastUpdated: response.lastUpdated,
     );
   }
 }

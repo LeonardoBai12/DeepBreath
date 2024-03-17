@@ -3,7 +3,7 @@ import 'package:deepbreath/location/data/remote/parameter_response.dart';
 
 class LocationResponse {
   int id;
-  String name;
+  String? name;
   String? city;
   List<ParameterResponse> parameters;
   List<ManufacturerResponse> manufacturers;

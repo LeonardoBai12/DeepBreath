@@ -5,6 +5,7 @@ class ParameterResponse {
   String displayName;
   double average;
   double lastValue;
+  String lastUpdated;
 
   ParameterResponse({
     required this.id,
@@ -13,6 +14,7 @@ class ParameterResponse {
     required this.displayName,
     required this.average,
     required this.lastValue,
+    required this.lastUpdated,
   });
 
   factory ParameterResponse.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class ParameterResponse {
       displayName: json['displayName'],
       average: json['average'].toDouble(),
       lastValue: json['lastValue'].toDouble(),
+      lastUpdated: json['lastUpdated'],
     );
   }
 }

@@ -5,7 +5,8 @@ class Location {
   int id;
   String name;
   String? city;
-  List<String> manufacturers;
+  String sensorManufacturer;
+  String sensorModel;
   List<Parameter> parameters;
   String lastUpdated;
 
@@ -13,7 +14,8 @@ class Location {
     required this.id,
     required this.name,
     required this.city,
-    required this.manufacturers,
+    required this.sensorManufacturer,
+    required this.sensorModel,
     required this.parameters,
     required this.lastUpdated,
   });
@@ -21,13 +23,10 @@ class Location {
   factory Location.fromLocationResponse(LocationResponse response) {
     return Location(
         id: response.id,
-        name: response.name,
+        name: response.name ?? "",
         city: response.city,
-        manufacturers: List<String>.from(
-          response.manufacturers.map((x) =>
-            "${x.manufacturerName} (${x.modelName})"
-          )
-        ),
+        sensorManufacturer: response.manufacturers.first.manufacturerName,
+        sensorModel: response.manufacturers.first.modelName,
         parameters: List<Parameter>.from(
           response.parameters.map((x) =>
             Parameter.fromParameterResponse(x)

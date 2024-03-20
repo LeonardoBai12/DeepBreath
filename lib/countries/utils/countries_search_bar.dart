@@ -43,8 +43,9 @@ class _CountriesSearchBarState extends State<CountriesSearchBar> {
     setState(() {
       filteredCountries = widget.countries
           .where((country) =>
-          country.name.trim().toLowerCase().contains(query.toLowerCase()))
-          .toList();
+          country.name.trim().toLowerCase().contains(
+              query.trim().toLowerCase()
+          )).toList();
       widget.onSearch(filteredCountries);
     });
   }

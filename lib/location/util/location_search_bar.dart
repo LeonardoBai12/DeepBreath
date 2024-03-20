@@ -43,8 +43,9 @@ class _LocationSearchBarState extends State<LocationSearchBar> {
     setState(() {
       filteredLocation = widget.locations
           .where((location) =>
-          location.name.trim().toLowerCase().contains(query.toLowerCase()))
-          .toList();
+          location.name.trim().toLowerCase().contains(
+              query.trim().toLowerCase()
+          )).toList();
       widget.onSearch(filteredLocation);
     });
   }

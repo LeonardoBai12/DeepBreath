@@ -142,7 +142,7 @@ class LocationItem extends StatelessWidget {
               fontWeight: FontWeight.bold
           ),
         ),
-        location.city != null ?
+        location.city?.trim().isNotEmpty == true ?
         Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,

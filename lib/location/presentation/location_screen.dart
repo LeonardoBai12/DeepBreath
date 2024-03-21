@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:deepbreath/countries/domain/model/country.dart';
 import 'package:deepbreath/location/util/location_search_bar.dart';
+import 'package:deepbreath/utils/resource.dart';
 import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,6 +23,8 @@ class _LocationScreenState extends State<LocationScreen> {
   late final Country _country;
   late List<Location> _filteredLocations;
   late List<Location> _locations;
+  bool _isLoading = true;
+  String _errorMessage = "";
 
   @override
   void initState() {
@@ -30,17 +33,30 @@ class _LocationScreenState extends State<LocationScreen> {
     _country = Get.arguments["country"];
     _filteredLocations = [];
     _locations = [];
-    _loadCountries();
+    _loadLocations();
   }
 
-  Future<void> _loadCountries() async {
-    final locations = await _locationController.getLocationByCountryByCode(
+  Future<void> _loadLocations() async {
+    final locationsStream = _locationController.getLocationByCountryByCode(
         _country.code
     );
-    setState(() {
-      _locations = locations;
-      _filteredLocations = _locations;
-    });
+
+    await for (var resource in locationsStream) {
+      if (resource is Success) {
+        setState(() {
+          _locations = (resource as Success).data;
+          _filteredLocations = _locations;
+        });
+      } else if (resource is Error) {
+        setState(() {
+          _errorMessage = (resource as Error).message;
+        });
+      } else if (resource is Loading) {
+        setState(() {
+          _isLoading = (resource as Loading).isLoading;
+        });
+      }
+    }
   }
 
   @override

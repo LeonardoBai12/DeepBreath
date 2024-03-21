@@ -3,6 +3,7 @@ import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../utils/resource.dart';
 import '../utils/countries_search_bar.dart';
 import '../domain/model/country.dart';
 import 'countries_controller.dart';
@@ -18,6 +19,8 @@ class _CountriesScreenState extends State<CountriesScreen> {
   late final CountriesController _countriesController;
   late List<Country> _filteredCountries;
   late List<Country> _countries;
+  bool _isLoading = true;
+  String _errorMessage = "";
 
   @override
   void initState() {
@@ -29,11 +32,24 @@ class _CountriesScreenState extends State<CountriesScreen> {
   }
 
   Future<void> _loadCountries() async {
-    final countries = await _countriesController.getCountries();
-    setState(() {
-      _countries = countries;
-      _filteredCountries = _countries;
-    });
+    final countriesStream = _countriesController.getCountries();
+
+    await for (var resource in countriesStream) {
+      if (resource is Success) {
+        setState(() {
+          _countries = (resource as Success).data;
+          _filteredCountries = _countries;
+        });
+      } else if (resource is Error) {
+        setState(() {
+          _errorMessage = (resource as Error).message;
+        });
+      } else if (resource is Loading) {
+        setState(() {
+          _isLoading = (resource as Loading).isLoading;
+        });
+      }
+    }
   }
 
   @override

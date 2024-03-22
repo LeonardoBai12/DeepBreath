@@ -37,6 +37,7 @@ class DeepBreathApp extends StatelessWidget {
         ),
         GetPage(
             name: "/location_details_screen",
+            transition: Transition.fadeIn,
             page: () => const LocationDetailsScreen(),
         ),
       ],

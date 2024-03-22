@@ -3,6 +3,7 @@ import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../utils/resource.dart';
 import '../utils/countries_search_bar.dart';
 import '../domain/model/country.dart';
 import 'countries_controller.dart';
@@ -18,6 +19,8 @@ class _CountriesScreenState extends State<CountriesScreen> {
   late final CountriesController _countriesController;
   late List<Country> _filteredCountries;
   late List<Country> _countries;
+  bool _isLoading = true;
+  String _errorMessage = "";
 
   @override
   void initState() {
@@ -29,11 +32,24 @@ class _CountriesScreenState extends State<CountriesScreen> {
   }
 
   Future<void> _loadCountries() async {
-    final countries = await _countriesController.getCountries();
-    setState(() {
-      _countries = countries;
-      _filteredCountries = _countries;
-    });
+    final countriesStream = _countriesController.getCountries();
+
+    await for (var resource in countriesStream) {
+      if (resource is Success) {
+        setState(() {
+          _countries = (resource as Success).data;
+          _filteredCountries = _countries;
+        });
+      } else if (resource is Error) {
+        setState(() {
+          _errorMessage = (resource as Error).message;
+        });
+      } else if (resource is Loading) {
+        setState(() {
+          _isLoading = (resource as Loading).isLoading;
+        });
+      }
+    }
   }
 
   @override
@@ -46,42 +62,64 @@ class _CountriesScreenState extends State<CountriesScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-            children: [
-              CountriesSearchBar(
-                countries: _countries,
-                onSearch: (filteredCountries) {
-                  setState(() {
-                    _filteredCountries = filteredCountries;
-                  });
-                },
-              ),
+        child: Builder(
+            builder: (context) {
+              if (_isLoading) {
+                return const Center(
+                    heightFactor: 15,
+                    child: CircularProgressIndicator()
+                );
+              } else if (_errorMessage.isNotEmpty) {
+                return Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                        _errorMessage,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold
+                        )
+                    )
+                );
+              }
 
-              GridView.builder(
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
-                ),
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: _filteredCountries.length,
-                itemBuilder: (context, index) {
-                  Country country = _filteredCountries[index];
-
-                  return GestureDetector(
-                      onTap: () {
-                        Get.toNamed("/location_screen",
-                            arguments: {
-                              "country": country
-                            });
+              return Column(
+                  children: [
+                    CountriesSearchBar(
+                      countries: _countries,
+                      onSearch: (filteredCountries) {
+                        setState(() {
+                          _filteredCountries = filteredCountries;
+                        });
                       },
-                      child: CountryItem(country: country)
-                  );
-                },
-              )
-            ]
-        ),
+                    ),
+
+                    GridView.builder(
+                      shrinkWrap: true,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 8.0,
+                        mainAxisSpacing: 8.0,
+                      ),
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _filteredCountries.length,
+                      itemBuilder: (context, index) {
+                        Country country = _filteredCountries[index];
+
+                        return GestureDetector(
+                            onTap: () {
+                              Get.toNamed("/location_screen",
+                                  arguments: {
+                                    "country": country
+                                  });
+                            },
+                            child: CountryItem(country: country)
+                        );
+                      },
+                    )
+                  ]
+              );
+            }
+        )
       ),
     );
   }

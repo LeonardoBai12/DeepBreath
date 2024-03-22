@@ -33,7 +33,7 @@ class LocationRemoteDataSource {
         throw Exception('Failed to load data: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Error: $e');
+      rethrow;
     }
   }
 }

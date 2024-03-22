@@ -95,7 +95,7 @@ class LocationData extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              _location.city != null ?
+              _location.city?.trim().isNotEmpty == true ?
               Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

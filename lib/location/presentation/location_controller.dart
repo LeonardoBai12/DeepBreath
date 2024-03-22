@@ -1,3 +1,4 @@
+import 'package:deepbreath/utils/resource.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
 import '../domain/model/location.dart';
@@ -7,7 +8,7 @@ class LocationController extends GetxController {
   final LocationUseCases _useCases;
   LocationController(this._useCases);
 
-  Future<List<Location>> getLocationByCountryByCode(String code) async {
-    return await _useCases.getLocationByCountryByCodeUseCase.execute(code);
+  Stream<Resource<List<Location>>> getLocationByCountryByCode(String code) {
+    return _useCases.getLocationByCountryByCodeUseCase.execute(code);
   }
 }

@@ -1,4 +1,5 @@
 import 'package:deepbreath/countries/data/remote/country_response.dart';
+import 'package:deepbreath/utils/resource.dart';
 
 import '../../domain/model/country.dart';
 import '../../domain/repository/countries_repository.dart';
@@ -9,17 +10,36 @@ class CountriesRepositoryImpl implements CountriesRepository {
   CountriesRepositoryImpl(this._dataSource);
 
   @override
-  Future<List<Country>> getCountries() async {
-    List<CountryResponse> result = await _dataSource.getCountries();
-    return result.map((result) => Country.fromCountryResponse(result)).toList();
+  Stream<Resource<List<Country>>> getCountries() async* {
+    yield Loading(true);
+
+    try {
+      List<CountryResponse> result = await _dataSource.getCountries();
+      yield Success(
+          result.map((result) => Country.fromCountryResponse(result)).toList()
+      );
+    } catch (e) {
+      yield Error(e.toString());
+    }
+
+    yield Loading(false);
   }
 
   @override
-  Future<Country?> getCountryDetails(String code) async {
-    CountryResponse? result = await _dataSource.getCountryDetails(code);
-    if (result == null) {
-      return null;
+  Stream<Resource<Country?>> getCountryDetails(String code) async* {
+    yield Loading(true);
+
+    try {
+      CountryResponse? result = await _dataSource.getCountryDetails(code);
+      if (result == null) {
+        yield Error("No country found for this code.");
+      } else {
+        yield Success(Country.fromCountryResponse(result));
+      }
+    } catch (e) {
+      yield Error(e.toString());
     }
-    return Country.fromCountryResponse(result);
+
+    yield Loading(false);
   }
 }

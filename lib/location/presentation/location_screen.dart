@@ -1,7 +1,6 @@
-import 'dart:ui';
-
 import 'package:deepbreath/countries/domain/model/country.dart';
 import 'package:deepbreath/location/util/location_search_bar.dart';
+import 'package:deepbreath/utils/resource.dart';
 import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,6 +21,8 @@ class _LocationScreenState extends State<LocationScreen> {
   late final Country _country;
   late List<Location> _filteredLocations;
   late List<Location> _locations;
+  bool _isLoading = true;
+  String _errorMessage = "";
 
   @override
   void initState() {
@@ -30,17 +31,30 @@ class _LocationScreenState extends State<LocationScreen> {
     _country = Get.arguments["country"];
     _filteredLocations = [];
     _locations = [];
-    _loadCountries();
+    _loadLocations();
   }
 
-  Future<void> _loadCountries() async {
-    final locations = await _locationController.getLocationByCountryByCode(
+  Future<void> _loadLocations() async {
+    final locationsStream = _locationController.getLocationByCountryByCode(
         _country.code
     );
-    setState(() {
-      _locations = locations;
-      _filteredLocations = _locations;
-    });
+
+    await for (var resource in locationsStream) {
+      if (resource is Success) {
+        setState(() {
+          _locations = (resource as Success).data;
+          _filteredLocations = _locations;
+        });
+      } else if (resource is Error) {
+        setState(() {
+          _errorMessage = (resource as Error).message;
+        });
+      } else if (resource is Loading) {
+        setState(() {
+          _isLoading = (resource as Loading).isLoading;
+        });
+      }
+    }
   }
 
   @override
@@ -77,43 +91,67 @@ class _LocationScreenState extends State<LocationScreen> {
         ),
       ),
       body: SingleChildScrollView(
-          child: Column(
-              children: [
-                LocationSearchBar(
-                  locations: _locations,
-                  onSearch: (filteredLocation) {
-                    setState(() {
-                      _filteredLocations = filteredLocation;
-                    });
-                  },
-                ),
+          child: Builder(
+              builder: (context) {
+                if (_isLoading) {
+                  return const Center(
+                      heightFactor: 15,
+                      child: CircularProgressIndicator()
+                  );
+                } else if (_errorMessage.isNotEmpty) {
+                  return Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                          _errorMessage,
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold
+                          )
+                      )
+                  );
+                }
 
-                Padding(
-                    padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
-                    child: ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: _filteredLocations.length,
-                      itemBuilder: (context, index) {
-                        Location location = _filteredLocations[index];
-                        return GestureDetector(
-                            onTap: () {
-                              Get.toNamed(
-                                  "/location_details_screen",
-                                  arguments: { "location": location}
+                return Column(
+                    children: [
+                      LocationSearchBar(
+                        locations: _locations,
+                        onSearch: (filteredLocation) {
+                          setState(() {
+                            _filteredLocations = filteredLocation;
+                          });
+                        },
+                      ),
+
+                      Padding(
+                          padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
+                          child: ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: _filteredLocations.length,
+                            itemBuilder: (context, index) {
+                              Location location = _filteredLocations[index];
+                              return GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed(
+                                        "/location_details_screen",
+                                        arguments: { "location": location}
+                                    );
+                                  },
+                                  child: Card(
+                                      child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: LocationItem(
+                                              location: location
+                                          )
+                                      )
+                                  )
                               );
                             },
-                            child: Card(
-                                child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: LocationItem(location: location)
-                                )
-                            )
-                        );
-                      },
-                    )
-                ),
-              ]
+                          )
+                      ),
+                    ]
+                );
+              }
           )
       ),
     );
@@ -142,7 +180,7 @@ class LocationItem extends StatelessWidget {
               fontWeight: FontWeight.bold
           ),
         ),
-        location.city != null ?
+        location.city?.trim().isNotEmpty == true ?
         Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,

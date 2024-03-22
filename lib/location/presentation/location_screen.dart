@@ -93,12 +93,7 @@ class _LocationScreenState extends State<LocationScreen> {
       body: SingleChildScrollView(
           child: Builder(
               builder: (context) {
-                if (_isLoading) {
-                  return const Center(
-                      heightFactor: 15,
-                      child: CircularProgressIndicator()
-                  );
-                } else if (_errorMessage.isNotEmpty) {
+                if (_errorMessage.isNotEmpty) {
                   return Padding(
                       padding: const EdgeInsets.all(16),
                       child: Text(
@@ -111,45 +106,53 @@ class _LocationScreenState extends State<LocationScreen> {
                   );
                 }
 
-                return Column(
-                    children: [
-                      LocationSearchBar(
-                        locations: _locations,
-                        onSearch: (filteredLocation) {
-                          setState(() {
-                            _filteredLocations = filteredLocation;
-                          });
-                        },
-                      ),
+                return AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 500),
+                    child: _isLoading ? const Center(
+                        heightFactor: 15,
+                        child: CircularProgressIndicator()
+                    ) : Column(
+                        children: [
+                          LocationSearchBar(
+                            locations: _locations,
+                            onSearch: (filteredLocation) {
+                              setState(() {
+                                _filteredLocations = filteredLocation;
+                              });
+                            },
+                          ),
 
-                      Padding(
-                          padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
-                          child: ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: _filteredLocations.length,
-                            itemBuilder: (context, index) {
-                              Location location = _filteredLocations[index];
-                              return GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(
-                                        "/location_details_screen",
-                                        arguments: { "location": location}
-                                    );
-                                  },
-                                  child: Card(
-                                      child: Padding(
-                                          padding: const EdgeInsets.all(12.0),
-                                          child: LocationItem(
-                                              location: location
+                          Padding(
+                              padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
+                              child: ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: _filteredLocations.length,
+                                itemBuilder: (context, index) {
+                                  Location location = _filteredLocations[index];
+                                  return GestureDetector(
+                                      onTap: () {
+                                        Get.toNamed(
+                                            "/location_details_screen",
+                                            arguments: { "location": location}
+                                        );
+                                      },
+                                      child: Card(
+                                          child: Padding(
+                                              padding: const EdgeInsets.all(
+                                                  12.0
+                                              ),
+                                              child: LocationItem(
+                                                  location: location
+                                              )
                                           )
                                       )
-                                  )
-                              );
-                            },
-                          )
-                      ),
-                    ]
+                                  );
+                                },
+                              )
+                          ),
+                        ]
+                    )
                 );
               }
           )

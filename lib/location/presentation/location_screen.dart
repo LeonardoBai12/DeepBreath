@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:deepbreath/countries/domain/model/country.dart';
 import 'package:deepbreath/location/util/location_search_bar.dart';
 import 'package:deepbreath/utils/resource.dart';
@@ -93,43 +91,67 @@ class _LocationScreenState extends State<LocationScreen> {
         ),
       ),
       body: SingleChildScrollView(
-          child: Column(
-              children: [
-                LocationSearchBar(
-                  locations: _locations,
-                  onSearch: (filteredLocation) {
-                    setState(() {
-                      _filteredLocations = filteredLocation;
-                    });
-                  },
-                ),
+          child: Builder(
+              builder: (context) {
+                if (_isLoading) {
+                  return const Center(
+                      heightFactor: 15,
+                      child: CircularProgressIndicator()
+                  );
+                } else if (_errorMessage.isNotEmpty) {
+                  return Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                          _errorMessage,
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold
+                          )
+                      )
+                  );
+                }
 
-                Padding(
-                    padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
-                    child: ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: _filteredLocations.length,
-                      itemBuilder: (context, index) {
-                        Location location = _filteredLocations[index];
-                        return GestureDetector(
-                            onTap: () {
-                              Get.toNamed(
-                                  "/location_details_screen",
-                                  arguments: { "location": location}
+                return Column(
+                    children: [
+                      LocationSearchBar(
+                        locations: _locations,
+                        onSearch: (filteredLocation) {
+                          setState(() {
+                            _filteredLocations = filteredLocation;
+                          });
+                        },
+                      ),
+
+                      Padding(
+                          padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
+                          child: ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: _filteredLocations.length,
+                            itemBuilder: (context, index) {
+                              Location location = _filteredLocations[index];
+                              return GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed(
+                                        "/location_details_screen",
+                                        arguments: { "location": location}
+                                    );
+                                  },
+                                  child: Card(
+                                      child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: LocationItem(
+                                              location: location
+                                          )
+                                      )
+                                  )
                               );
                             },
-                            child: Card(
-                                child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: LocationItem(location: location)
-                                )
-                            )
-                        );
-                      },
-                    )
-                ),
-              ]
+                          )
+                      ),
+                    ]
+                );
+              }
           )
       ),
     );

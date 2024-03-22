@@ -62,42 +62,64 @@ class _CountriesScreenState extends State<CountriesScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-            children: [
-              CountriesSearchBar(
-                countries: _countries,
-                onSearch: (filteredCountries) {
-                  setState(() {
-                    _filteredCountries = filteredCountries;
-                  });
-                },
-              ),
+        child: Builder(
+            builder: (context) {
+              if (_isLoading) {
+                return const Center(
+                    heightFactor: 15,
+                    child: CircularProgressIndicator()
+                );
+              } else if (_errorMessage.isNotEmpty) {
+                return Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                        _errorMessage,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold
+                        )
+                    )
+                );
+              }
 
-              GridView.builder(
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
-                ),
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: _filteredCountries.length,
-                itemBuilder: (context, index) {
-                  Country country = _filteredCountries[index];
-
-                  return GestureDetector(
-                      onTap: () {
-                        Get.toNamed("/location_screen",
-                            arguments: {
-                              "country": country
-                            });
+              return Column(
+                  children: [
+                    CountriesSearchBar(
+                      countries: _countries,
+                      onSearch: (filteredCountries) {
+                        setState(() {
+                          _filteredCountries = filteredCountries;
+                        });
                       },
-                      child: CountryItem(country: country)
-                  );
-                },
-              )
-            ]
-        ),
+                    ),
+
+                    GridView.builder(
+                      shrinkWrap: true,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 8.0,
+                        mainAxisSpacing: 8.0,
+                      ),
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _filteredCountries.length,
+                      itemBuilder: (context, index) {
+                        Country country = _filteredCountries[index];
+
+                        return GestureDetector(
+                            onTap: () {
+                              Get.toNamed("/location_screen",
+                                  arguments: {
+                                    "country": country
+                                  });
+                            },
+                            child: CountryItem(country: country)
+                        );
+                      },
+                    )
+                  ]
+              );
+            }
+        )
       ),
     );
   }

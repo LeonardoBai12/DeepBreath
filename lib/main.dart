@@ -26,19 +26,21 @@ class DeepBreathApp extends StatelessWidget {
       ),
       getPages: [
         GetPage(
-          name: "/countries_screen",
-          page: () => const CountriesScreen(),
-          binding: CountriesBinding()
-        ),
-        GetPage(
-          name: "/location_screen",
-          page: () => const LocationScreen(),
-          binding: LocationBinding()
-        ),
-        GetPage(
-            name: "/location_details_screen",
+            name: "/countries_screen",
+            page: () => const CountriesScreen(),
             transition: Transition.fadeIn,
-            page: () => const LocationDetailsScreen(),
+            binding: CountriesBinding()
+        ),
+        GetPage(
+            name: "/location_screen",
+            page: () => const LocationScreen(),
+            transition: Transition.fadeIn,
+            binding: LocationBinding()
+        ),
+        GetPage(
+          name: "/location_details_screen",
+          transition: Transition.fadeIn,
+          page: () => const LocationDetailsScreen(),
         ),
       ],
     );

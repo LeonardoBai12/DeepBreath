@@ -33,7 +33,8 @@ class _CountriesSearchBarState extends State<CountriesSearchBar> {
           backgroundColor: MaterialStateColor.resolveWith((states) => const Color(0xF1FFFAFF)),
           shadowColor: MaterialStateColor.resolveWith((states) => const Color(0x66000000)),
           padding: const MaterialStatePropertyAll<EdgeInsets>(
-              EdgeInsets.symmetric(horizontal: 16)),
+              EdgeInsets.symmetric(horizontal: 16)
+          ),
           onChanged: (query) {
             filter(query);
           },

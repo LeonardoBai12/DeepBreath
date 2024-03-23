@@ -47,8 +47,7 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
         body: Stack(
             children: [
               SingleChildScrollView(
-                  child:
-                  SafeArea(
+                  child: SafeArea(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,

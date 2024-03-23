@@ -187,9 +187,9 @@ class CountryItem extends StatelessWidget {
                 tag: country,
                 child: Flag.fromString(
                   country.code,
-                  height: 60,
-                  width: 90,
-                  borderRadius: 12,
+                  height: 69,
+                  width: 92,
+                  borderRadius: 4,
                 )
             )
         ),

@@ -1,6 +1,7 @@
 import 'package:deepbreath/location/di/location_binding.dart';
 import 'package:deepbreath/location/presentation/location_details_screen.dart';
 import 'package:deepbreath/location/presentation/location_screen.dart';
+import 'package:deepbreath/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,7 +22,7 @@ class DeepBreathApp extends StatelessWidget {
       initialRoute: "/countries_screen",
       title: 'Flutter Demo',
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color(0xFFFAFAFA),
+        scaffoldBackgroundColor: DeepBreathColors.background,
         useMaterial3: true,
       ),
       getPages: [

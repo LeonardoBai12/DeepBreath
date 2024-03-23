@@ -1,6 +1,4 @@
-import 'dart:ui';
-
-import 'package:deepbreath/location/presentation/location_screen.dart';
+import 'package:deepbreath/utils/theme.dart';
 import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -64,7 +62,7 @@ class _CountriesScreenState extends State<CountriesScreen> {
           "DeepBreath",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.white.withAlpha(200),
+        backgroundColor: DeepBreathColors.appBarBackground,
         flexibleSpace: const BlurEffect(),
       ),
       body: Stack(
@@ -85,7 +83,8 @@ class _CountriesScreenState extends State<CountriesScreen> {
                               children: [
                                 const SizedBox(height: 70),
                                 CountriesGridView(
-                                    filteredCountries: _filteredCountries),
+                                    filteredCountries: _filteredCountries
+                                ),
                               ]
                           )
                       );
@@ -155,13 +154,10 @@ class CountryErrorMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(16),
+        padding: DeepBreathPaddings.mainAllPadding,
         child: Text(
             _errorMessage,
-            style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold
-            )
+            style: DeepBreathTextStyles.subtitle
         )
     );
   }
@@ -180,9 +176,7 @@ class CountryItem extends StatelessWidget {
     return Column(
       children: [
         Padding(
-            padding: const EdgeInsets.fromLTRB(
-                0, 0, 0, 6
-            ),
+            padding: DeepBreathPaddings.smallBottomPadding,
             child: Hero(
                 tag: country,
                 child: Flag.fromString(

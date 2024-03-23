@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/theme.dart';
 import '../domain/model/country.dart';
 
 class CountriesSearchBar extends StatefulWidget {
@@ -27,14 +28,16 @@ class _CountriesSearchBarState extends State<CountriesSearchBar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      padding: DeepBreathPaddings.searchBarOuterPadding,
       child: SearchBar(
           hintText: "Search for a country...",
-          backgroundColor: MaterialStateColor.resolveWith((states) => const Color(0xF1FFFAFF)),
-          shadowColor: MaterialStateColor.resolveWith((states) => const Color(0x66000000)),
-          padding: const MaterialStatePropertyAll<EdgeInsets>(
-              EdgeInsets.symmetric(horizontal: 16)
+          backgroundColor: MaterialStateColor.resolveWith((states) =>
+          DeepBreathColors.searchBarBackground
           ),
+          shadowColor: MaterialStateColor.resolveWith((states) =>
+          DeepBreathColors.searchBarShadow
+          ),
+          padding: DeepBreathPaddings.searchBarInnerPadding,
           onChanged: (query) {
             filter(query);
           },

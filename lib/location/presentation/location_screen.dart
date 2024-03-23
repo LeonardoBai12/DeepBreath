@@ -1,6 +1,7 @@
 import 'package:deepbreath/countries/domain/model/country.dart';
 import 'package:deepbreath/location/util/location_search_bar.dart';
 import 'package:deepbreath/utils/resource.dart';
+import 'package:deepbreath/utils/theme.dart';
 import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -70,7 +71,7 @@ class _LocationScreenState extends State<LocationScreen> {
               Navigator.pop(context);
             },
           ),
-          backgroundColor: Colors.white.withAlpha(200),
+          backgroundColor: DeepBreathColors.appBarBackground,
           flexibleSpace: const BlurEffect(),
         ),
         body: Stack(
@@ -91,8 +92,13 @@ class _LocationScreenState extends State<LocationScreen> {
                             ) : Column(
                                 children: [
                                   const SizedBox(height: 65),
-                                  LocationsListView(
-                                      filteredLocations: _filteredLocations
+
+                                  Padding(
+                                    padding: DeepBreathPaddings
+                                        .smallHorizontalPadding,
+                                    child: LocationsListView(
+                                        filteredLocations: _filteredLocations
+                                    ),
                                   ),
                                 ]
                             )
@@ -102,14 +108,14 @@ class _LocationScreenState extends State<LocationScreen> {
               ),
 
               SafeArea(
-                  child: LocationSearchBar(
-                    locations: _locations,
-                    onSearch: (filteredLocation) {
-                      setState(() {
-                        _filteredLocations = filteredLocation;
-                      });
-                    },
-                  ),
+                child: LocationSearchBar(
+                  locations: _locations,
+                  onSearch: (filteredLocation) {
+                    setState(() {
+                      _filteredLocations = filteredLocation;
+                    });
+                  },
+                ),
               )
             ]
         )
@@ -127,36 +133,30 @@ class LocationsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-        child: ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: _filteredLocations.length,
-          itemBuilder: (context, index) {
-            Location location = _filteredLocations[index];
-            return GestureDetector(
-                onTap: () {
-                  Get.toNamed(
-                      "/location_details_screen",
-                      arguments: { "location": location}
-                  );
-                },
-                child: Card(
-                    shadowColor: Colors.transparent,
-                    surfaceTintColor: const Color(0xFF505050),
-                    shape: const RoundedRectangleBorder(
-                      side: BorderSide(width: 1, color: Color(0x0D000000)),
-                      borderRadius: BorderRadius.all(Radius.circular(12))
-                    ),
-                    child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: LocationItem(location: location)
-                    )
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: _filteredLocations.length,
+      itemBuilder: (context, index) {
+        Location location = _filteredLocations[index];
+        return GestureDetector(
+            onTap: () {
+              Get.toNamed(
+                  "/location_details_screen",
+                  arguments: { "location": location}
+              );
+            },
+            child: Card(
+                shadowColor: Colors.transparent,
+                surfaceTintColor: DeepBreathColors.cardBackground,
+                shape: DeepBreathTextShapes.cardBorder,
+                child: Padding(
+                    padding: DeepBreathPaddings.mainAllPadding,
+                    child: LocationItem(location: location)
                 )
-            );
-          },
-        )
+            )
+        );
+      },
     );
   }
 }
@@ -172,13 +172,10 @@ class LocationsErrorMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(16),
+        padding: DeepBreathPaddings.mainAllPadding,
         child: Text(
             _errorMessage,
-            style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold
-            )
+            style: DeepBreathTextStyles.subtitle
         )
     );
   }
@@ -196,22 +193,22 @@ class LocationsAppBarTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
         children: [
-          Hero(
-            tag: _country,
-            child: Flag.fromString(
-              _country.code,
-              height: 30,
-              width: 60,
-              borderRadius: 8,
+          Padding(
+            padding: DeepBreathPaddings.mainEndPadding,
+            child: Hero(
+              tag: _country,
+              child: Flag.fromString(
+                _country.code,
+                height: 30,
+                width: 40,
+                borderRadius: 4,
+              ),
             ),
           ),
           Flexible(
               child: Text(
                 _country.name,
-                style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold
-                ),
+                style: DeepBreathTextStyles.title,
               )
           )
         ]
@@ -236,10 +233,7 @@ class LocationItem extends StatelessWidget {
         Text(
           location.name,
           textAlign: TextAlign.start,
-          style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold
-          ),
+          style: DeepBreathTextStyles.subtitle
         ),
         location.city?.trim().isNotEmpty == true ?
         Column(
@@ -249,32 +243,24 @@ class LocationItem extends StatelessWidget {
               const Text(
                 "City: ",
                 textAlign: TextAlign.start,
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold
-                ),
+                style: DeepBreathTextStyles.mediumHeader,
               ),
               Text(
                 location.city!,
                 textAlign: TextAlign.start,
-                style: const TextStyle(fontSize: 16),
+                style: DeepBreathTextStyles.bigCaption
               )
             ]
         ) : const SizedBox(),
         const Text(
           "Last time updated: ",
           textAlign: TextAlign.start,
-          style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold
-          ),
+          style: DeepBreathTextStyles.mediumHeader,
         ),
         Text(
           transformDateFormat(location.lastUpdated),
           textAlign: TextAlign.start,
-          style: const TextStyle(
-            fontSize: 16,
-          ),
+          style: DeepBreathTextStyles.bigCaption
         ),
       ],
     );

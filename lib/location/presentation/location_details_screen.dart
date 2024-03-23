@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../utils/blur_effect.dart';
+import '../../utils/theme.dart';
 import '../domain/model/parameter.dart';
 import '../util/string_helper.dart';
 
@@ -41,7 +42,7 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
               Navigator.pop(context);
             },
           ),
-          backgroundColor: Colors.white.withAlpha(200),
+          backgroundColor: DeepBreathColors.appBarBackground,
           flexibleSpace: const BlurEffect(),
         ),
         body: Stack(
@@ -53,10 +54,13 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         LocationData(location: _location, size: size),
-                        ParametersGridView(
-                            itemWidth: itemWidth,
-                            itemHeight: itemHeight,
-                            location: _location
+                        Padding(
+                          padding: DeepBreathPaddings.smallHorizontalPadding,
+                          child: ParametersGridView(
+                              itemWidth: itemWidth,
+                              itemHeight: itemHeight,
+                              location: _location
+                          ),
                         ),
                       ],
                     ),
@@ -80,10 +84,7 @@ class LocationDetailsTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       _location.name,
-      style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize:  24
-      ),
+      style: DeepBreathTextStyles.title
     );
   }
 }
@@ -102,23 +103,18 @@ class ParametersGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-        child: GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: (itemWidth / itemHeight),
-              crossAxisCount: 2,
-              crossAxisSpacing: 4.0,
-              mainAxisSpacing: 4.0,
-            ),
-            itemCount: _location.parameters.length,
-            itemBuilder: (context, index) {
-              Parameter parameter = _location.parameters[index];
-              return ParameterItem(parameter: parameter);
-            }
-        )
+    return GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          childAspectRatio: (itemWidth / itemHeight),
+          crossAxisCount: 2,
+        ),
+        itemCount: _location.parameters.length,
+        itemBuilder: (context, index) {
+          Parameter parameter = _location.parameters[index];
+          return ParameterItem(parameter: parameter);
+        }
     );
   }
 }
@@ -136,7 +132,7 @@ class LocationData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
+        padding: DeepBreathPaddings.dataPadding,
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -147,42 +143,29 @@ class LocationData extends StatelessWidget {
                   children: [
                     const Text(
                       "City: ",
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold
-                      ),
+                      style: DeepBreathTextStyles.mediumHeader,
                     ),
                     Text(
                       _location.city ?? "",
-                      style: const TextStyle(fontSize: 16),
+                      style: DeepBreathTextStyles.bigCaption,
                     )
                   ]
               ) : SizedBox(width: size.width),
               const Text(
                 "Sensor manufacturer: ",
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold
-                ),
+                style: DeepBreathTextStyles.mediumHeader,
               ),
               Text(
                 _location.sensorManufacturer,
-                style: const TextStyle(
-                    fontSize: 16
-                ),
+                style: DeepBreathTextStyles.bigCaption,
               ),
               const Text(
                 "Sensor model: ",
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold
-                ),
+                style: DeepBreathTextStyles.mediumHeader,
               ),
               Text(
                 _location.sensorModel,
-                style: const TextStyle(
-                    fontSize: 16
-                ),
+                style: DeepBreathTextStyles.bigCaption,
               )
             ]
         )
@@ -202,67 +185,46 @@ class ParameterItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         shadowColor: Colors.transparent,
-        surfaceTintColor: const Color(0xFF505050),
-        shape: const RoundedRectangleBorder(
-            side: BorderSide(width: 1, color: Color(0x0D000000)),
-            borderRadius: BorderRadius.all(Radius.circular(12))
-        ),
+        surfaceTintColor: DeepBreathColors.cardBackground,
+        shape: DeepBreathTextShapes.cardBorder,
         child: Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: DeepBreathPaddings.mainAllPadding,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   parameter.displayName,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20
-                  ),
+                  style: DeepBreathTextStyles.subtitle,
                 ),
                 const Text(
                   "Average: ",
-                  style: TextStyle(
-                      fontSize: 8,
-                      fontWeight: FontWeight.bold
-                  ),
+                  style: DeepBreathTextStyles.smallHeader,
                 ),
                 Text(
                   "${parameter.average.toStringAsFixed(
                       3)} "
                       "${parameter.units}",
-                  style: const TextStyle(
-                      fontSize: 12
-                  ),
+                  style: DeepBreathTextStyles.mediumCaption,
                 ),
                 const Text(
                   "Last value: ",
-                  style: TextStyle(
-                      fontSize: 8,
-                      fontWeight: FontWeight.bold
-                  ),
+                  style: DeepBreathTextStyles.smallHeader,
                 ),
                 Text(
                   "${parameter.lastValue.toStringAsFixed(
                       3)} "
                       "${parameter.units}",
-                  style: const TextStyle(
-                      fontSize: 12
-                  ),
+                  style: DeepBreathTextStyles.mediumCaption,
                 ),
                 const Text(
                   "Last time updated: ",
-                  style: TextStyle(
-                      fontSize: 8,
-                      fontWeight: FontWeight.bold
-                  ),
+                  style: DeepBreathTextStyles.smallHeader,
                 ),
                 Text(
                   transformDateFormat(
                       parameter.lastUpdated
                   ),
-                  style: const TextStyle(
-                      fontSize: 12
-                  ),
+                  style: DeepBreathTextStyles.mediumCaption,
                 ),
               ],
             )

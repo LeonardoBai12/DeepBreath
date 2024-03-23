@@ -2,6 +2,7 @@ import 'package:deepbreath/location/domain/model/location.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../utils/blur_effect.dart';
 import '../domain/model/parameter.dart';
 import '../util/string_helper.dart';
 
@@ -31,48 +32,94 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
     final double itemWidth = size.width / 2;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          _location.name,
-          style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize:  24
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          title: LocationDetailsTitle(location: _location),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
+          backgroundColor: Colors.white.withAlpha(200),
+          flexibleSpace: const BlurEffect(),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            LocationData(location: _location, size: size),
-            Padding(
-                padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
-                child: GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: (itemWidth / itemHeight),
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 8.0,
-                      mainAxisSpacing: 8.0,
+        body: Stack(
+            children: [
+              SingleChildScrollView(
+                  child:
+                  SafeArea(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        LocationData(location: _location, size: size),
+                        ParametersGridView(
+                            itemWidth: itemWidth,
+                            itemHeight: itemHeight,
+                            location: _location
+                        ),
+                      ],
                     ),
-                    itemCount: _location.parameters.length,
-                    itemBuilder: (context, index) {
-                      Parameter parameter = _location.parameters[index];
-                      return ParameterItem(parameter: parameter);
-                    }
-                )
-            ),
-          ],
-        ),
+                  )
+              ),
+            ]
+        )
+    );
+  }
+}
+
+class LocationDetailsTitle extends StatelessWidget {
+  const LocationDetailsTitle({
+    super.key,
+    required Location location,
+  }) : _location = location;
+
+  final Location _location;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      _location.name,
+      style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize:  24
       ),
+    );
+  }
+}
+
+class ParametersGridView extends StatelessWidget {
+  const ParametersGridView({
+    super.key,
+    required this.itemWidth,
+    required this.itemHeight,
+    required Location location,
+  }) : _location = location;
+
+  final double itemWidth;
+  final double itemHeight;
+  final Location _location;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+        child: GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: (itemWidth / itemHeight),
+              crossAxisCount: 2,
+              crossAxisSpacing: 4.0,
+              mainAxisSpacing: 4.0,
+            ),
+            itemCount: _location.parameters.length,
+            itemBuilder: (context, index) {
+              Parameter parameter = _location.parameters[index];
+              return ParameterItem(parameter: parameter);
+            }
+        )
     );
   }
 }
@@ -90,7 +137,7 @@ class LocationData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.fromLTRB(12, 0, 0, 6),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -155,6 +202,12 @@ class ParameterItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+        shadowColor: Colors.transparent,
+        surfaceTintColor: const Color(0xFF505050),
+        shape: const RoundedRectangleBorder(
+            side: BorderSide(width: 1, color: Color(0x0D000000)),
+            borderRadius: BorderRadius.all(Radius.circular(12))
+        ),
         child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(

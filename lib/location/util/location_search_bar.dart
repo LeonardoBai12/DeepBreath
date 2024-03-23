@@ -27,10 +27,14 @@ class _LocationSearchBarState extends State<LocationSearchBar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 4, 8, 16),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: SearchBar(
+          hintText: "Search for a location...",
+          backgroundColor: MaterialStateColor.resolveWith((states) => const Color(0xF1FFFAFF)),
+          shadowColor: MaterialStateColor.resolveWith((states) => const Color(0x66000000)),
           padding: const MaterialStatePropertyAll<EdgeInsets>(
-              EdgeInsets.symmetric(horizontal: 16)),
+              EdgeInsets.symmetric(horizontal: 16)
+          ),
           onChanged: (query) {
             filter(query);
           },

@@ -5,6 +5,7 @@ import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../utils/blur_effect.dart';
 import '../domain/model/location.dart';
 import '../util/string_helper.dart';
 import 'location_controller.dart';
@@ -60,103 +61,160 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          title: LocationsAppBarTitle(country: _country),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          backgroundColor: Colors.white.withAlpha(200),
+          flexibleSpace: const BlurEffect(),
+        ),
+        body: Stack(
             children: [
-              Hero(
-                tag: _country,
-                child: Flag.fromString(
-                  _country.code,
-                  height: 30,
-                  width: 60,
-                  borderRadius: 8,
-                ),
-              ),
-              Flexible(
-                  child: Text(
-                    _country.name,
-                    style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold
-                    ),
+              SingleChildScrollView(
+                  child: Builder(
+                      builder: (context) {
+                        if (_errorMessage.isNotEmpty) {
+                          return LocationsErrorMessage(
+                              errorMessage: _errorMessage);
+                        }
+
+                        return AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 500),
+                            child: _isLoading ? const Center(
+                                heightFactor: 15,
+                                child: CircularProgressIndicator()
+                            ) : Column(
+                                children: [
+                                  const SizedBox(height: 65),
+                                  LocationsListView(
+                                      filteredLocations: _filteredLocations
+                                  ),
+                                ]
+                            )
+                        );
+                      }
                   )
+              ),
+
+              SafeArea(
+                  child: LocationSearchBar(
+                    locations: _locations,
+                    onSearch: (filteredLocation) {
+                      setState(() {
+                        _filteredLocations = filteredLocation;
+                      });
+                    },
+                  ),
               )
             ]
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: SingleChildScrollView(
-          child: Builder(
-              builder: (context) {
-                if (_errorMessage.isNotEmpty) {
-                  return Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Text(
-                          _errorMessage,
-                          style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold
-                          )
-                      )
+        )
+    );
+  }
+}
+
+class LocationsListView extends StatelessWidget {
+  const LocationsListView({
+    super.key,
+    required List<Location> filteredLocations,
+  }) : _filteredLocations = filteredLocations;
+
+  final List<Location> _filteredLocations;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+        child: ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: _filteredLocations.length,
+          itemBuilder: (context, index) {
+            Location location = _filteredLocations[index];
+            return GestureDetector(
+                onTap: () {
+                  Get.toNamed(
+                      "/location_details_screen",
+                      arguments: { "location": location}
                   );
-                }
-
-                return AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 500),
-                    child: _isLoading ? const Center(
-                        heightFactor: 15,
-                        child: CircularProgressIndicator()
-                    ) : Column(
-                        children: [
-                          LocationSearchBar(
-                            locations: _locations,
-                            onSearch: (filteredLocation) {
-                              setState(() {
-                                _filteredLocations = filteredLocation;
-                              });
-                            },
-                          ),
-
-                          Padding(
-                              padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
-                              child: ListView.builder(
-                                physics: const NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: _filteredLocations.length,
-                                itemBuilder: (context, index) {
-                                  Location location = _filteredLocations[index];
-                                  return GestureDetector(
-                                      onTap: () {
-                                        Get.toNamed(
-                                            "/location_details_screen",
-                                            arguments: { "location": location}
-                                        );
-                                      },
-                                      child: Card(
-                                          child: Padding(
-                                              padding: const EdgeInsets.all(
-                                                  12.0
-                                              ),
-                                              child: LocationItem(
-                                                  location: location
-                                              )
-                                          )
-                                      )
-                                  );
-                                },
-                              )
-                          ),
-                        ]
+                },
+                child: Card(
+                    shadowColor: Colors.transparent,
+                    surfaceTintColor: const Color(0xFF505050),
+                    shape: const RoundedRectangleBorder(
+                      side: BorderSide(width: 1, color: Color(0x0D000000)),
+                      borderRadius: BorderRadius.all(Radius.circular(12))
+                    ),
+                    child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: LocationItem(location: location)
                     )
-                );
-              }
+                )
+            );
+          },
+        )
+    );
+  }
+}
+
+class LocationsErrorMessage extends StatelessWidget {
+  const LocationsErrorMessage({
+    super.key,
+    required String errorMessage,
+  }) : _errorMessage = errorMessage;
+
+  final String _errorMessage;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+            _errorMessage,
+            style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold
+            )
+        )
+    );
+  }
+}
+
+class LocationsAppBarTitle extends StatelessWidget {
+  const LocationsAppBarTitle({
+    super.key,
+    required Country country,
+  }) : _country = country;
+
+  final Country _country;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+        children: [
+          Hero(
+            tag: _country,
+            child: Flag.fromString(
+              _country.code,
+              height: 30,
+              width: 60,
+              borderRadius: 8,
+            ),
+          ),
+          Flexible(
+              child: Text(
+                _country.name,
+                style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold
+                ),
+              )
           )
-      ),
+        ]
     );
   }
 }

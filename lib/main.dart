@@ -21,7 +21,7 @@ class DeepBreathApp extends StatelessWidget {
       initialRoute: "/countries_screen",
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        scaffoldBackgroundColor: const Color(0xFFFAFAFA),
         useMaterial3: true,
       ),
       getPages: [
@@ -39,7 +39,7 @@ class DeepBreathApp extends StatelessWidget {
         ),
         GetPage(
           name: "/location_details_screen",
-          transition: Transition.fadeIn,
+          transition: Transition.cupertino,
           page: () => const LocationDetailsScreen(),
         ),
       ],

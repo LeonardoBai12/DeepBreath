@@ -201,8 +201,7 @@ class ParameterItem extends StatelessWidget {
                   style: DeepBreathTextStyles.smallHeader,
                 ),
                 Text(
-                  "${parameter.average.toStringAsFixed(
-                      3)} "
+                  "${parameter.average.toStringAsFixed(3)} "
                       "${parameter.units}",
                   style: DeepBreathTextStyles.mediumCaption,
                 ),
@@ -211,8 +210,7 @@ class ParameterItem extends StatelessWidget {
                   style: DeepBreathTextStyles.smallHeader,
                 ),
                 Text(
-                  "${parameter.lastValue.toStringAsFixed(
-                      3)} "
+                  "${parameter.lastValue.toStringAsFixed(3)} "
                       "${parameter.units}",
                   style: DeepBreathTextStyles.mediumCaption,
                 ),
@@ -221,9 +219,7 @@ class ParameterItem extends StatelessWidget {
                   style: DeepBreathTextStyles.smallHeader,
                 ),
                 Text(
-                  transformDateFormat(
-                      parameter.lastUpdated
-                  ),
+                  transformDateFormat(parameter.lastUpdated),
                   style: DeepBreathTextStyles.mediumCaption,
                 ),
               ],

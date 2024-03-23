@@ -146,15 +146,7 @@ class LocationsListView extends StatelessWidget {
                   arguments: { "location": location}
               );
             },
-            child: Card(
-                shadowColor: Colors.transparent,
-                surfaceTintColor: DeepBreathColors.cardBackground,
-                shape: DeepBreathTextShapes.cardBorder,
-                child: Padding(
-                    padding: DeepBreathPaddings.mainAllPadding,
-                    child: LocationItem(location: location)
-                )
-            )
+            child: LocationItem(location: location)
         );
       },
     );
@@ -226,43 +218,53 @@ class LocationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment
-          .start,
-      children: [
-        Text(
-          location.name,
-          textAlign: TextAlign.start,
-          style: DeepBreathTextStyles.subtitle
-        ),
-        location.city?.trim().isNotEmpty == true ?
-        Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "City: ",
-                textAlign: TextAlign.start,
-                style: DeepBreathTextStyles.mediumHeader,
-              ),
-              Text(
-                location.city!,
-                textAlign: TextAlign.start,
-                style: DeepBreathTextStyles.bigCaption
-              )
-            ]
-        ) : const SizedBox(),
-        const Text(
-          "Last time updated: ",
-          textAlign: TextAlign.start,
-          style: DeepBreathTextStyles.mediumHeader,
-        ),
-        Text(
-          transformDateFormat(location.lastUpdated),
-          textAlign: TextAlign.start,
-          style: DeepBreathTextStyles.bigCaption
-        ),
-      ],
+    return Card(
+        shadowColor: Colors.transparent,
+        surfaceTintColor: DeepBreathColors.cardBackground,
+        shape: DeepBreathTextShapes.cardBorder,
+        child: Padding(
+            padding: DeepBreathPaddings.mainAllPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment
+                  .start,
+              children: [
+                Text(
+                    location.name,
+                    textAlign: TextAlign.start,
+                    style: DeepBreathTextStyles.subtitle
+                ),
+                location.city
+                    ?.trim()
+                    .isNotEmpty == true ?
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "City: ",
+                        textAlign: TextAlign.start,
+                        style: DeepBreathTextStyles.mediumHeader,
+                      ),
+                      Text(
+                          location.city!,
+                          textAlign: TextAlign.start,
+                          style: DeepBreathTextStyles.bigCaption
+                      )
+                    ]
+                ) : const SizedBox(),
+                const Text(
+                  "Last time updated: ",
+                  textAlign: TextAlign.start,
+                  style: DeepBreathTextStyles.mediumHeader,
+                ),
+                Text(
+                    transformDateFormat(location.lastUpdated),
+                    textAlign: TextAlign.start,
+                    style: DeepBreathTextStyles.bigCaption
+                ),
+              ],
+            )
+        )
     );
   }
 }

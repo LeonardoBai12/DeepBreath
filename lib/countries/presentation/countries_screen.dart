@@ -75,7 +75,7 @@ class _CountriesScreenState extends State<CountriesScreen> {
                       }
 
                       return AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 500),
+                          duration: const Duration(milliseconds: 1000),
                           child: _isLoading ? const Center(
                               heightFactor: 15,
                               child: CircularProgressIndicator()

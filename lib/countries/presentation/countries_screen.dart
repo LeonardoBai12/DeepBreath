@@ -190,9 +190,7 @@ class CountryItem extends StatelessWidget {
         Text(
             country.name,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-            )
+            style: DeepBreathTextStyles.subtitle
         )
       ],
     );

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'countries/di/countries_binding.dart';
-import 'countries/domain/model/country.dart';
 import 'countries/presentation/countries_screen.dart';
 
 void main() {
@@ -23,6 +22,7 @@ class DeepBreathApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         scaffoldBackgroundColor: DeepBreathColors.background,
+        fontFamily: "ProximaNova",
         useMaterial3: true,
       ),
       getPages: [

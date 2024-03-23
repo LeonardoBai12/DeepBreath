@@ -24,5 +24,11 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 flutter:
+  fonts:
+    - family: ProximaNova
+      fonts:
+        - asset: fonts/Mark Simonson  Proxima Nova Regular.otf
+        - asset: fonts/Mark Simonson  Proxima Nova Regular Italic.otf
+          style: italic
   uses-material-design: true
 

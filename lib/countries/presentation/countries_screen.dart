@@ -159,35 +159,30 @@ class CountryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      color: Theme.of(context).colorScheme.surfaceContainerLowest,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Hero(
-              tag: country,
-              child: Flag.fromString(
-                country.code,
-                height: 72,
-                width: 108,
-                borderRadius: 6,
-              ),
+    return Column(
+      children: [
+        Padding(
+          padding: DeepBreathPaddings.smallBottomPadding,
+          child: Hero(
+            tag: country,
+            child: Flag.fromString(
+              country.code,
+              height: 69,
+              width: 92,
+              borderRadius: 4,
             ),
-            const SizedBox(height: 10),
-            Text(
-              country.name,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 0.1),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+          ),
         ),
-      ),
+        Flexible(
+          child: Text(
+            country.name,
+            textAlign: TextAlign.center,
+            style: DeepBreathTextStyles.subtitle,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
     );
   }
 }

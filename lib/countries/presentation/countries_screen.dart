@@ -1,3 +1,4 @@
+import 'package:deepbreath/utils/error_view.dart';
 import 'package:deepbreath/utils/theme.dart';
 import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,16 @@ class _CountriesScreenState extends State<CountriesScreen> {
     }
   }
 
+  Future<void> _retry() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = "";
+      _countries = [];
+      _filteredCountries = [];
+    });
+    await _loadCountries();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,44 +76,52 @@ class _CountriesScreenState extends State<CountriesScreen> {
         backgroundColor: DeepBreathColors.appBarBackground,
         flexibleSpace: const BlurEffect(),
       ),
-      body: Stack(
-          children: [
-            SingleChildScrollView(
-                child: Builder(
-                    builder: (context) {
-                      if (_errorMessage.isNotEmpty) {
-                        return CountryErrorMessage(errorMessage: _errorMessage);
-                      }
-
-                      return AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 1000),
-                          child: _isLoading ? const Center(
-                              heightFactor: 15,
-                              child: CircularProgressIndicator()
-                          ) : Column(
-                              children: [
-                                const SizedBox(height: 70),
-                                CountriesGridView(
-                                    filteredCountries: _filteredCountries
-                                ),
-                              ]
-                          )
-                      );
-                    }
+      body: _errorMessage.isNotEmpty
+          ? ErrorView(onRetry: _retry)
+          : Stack(
+              children: [
+                SingleChildScrollView(
+                    child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 1000),
+                        child: _isLoading ? const Center(
+                            heightFactor: 15,
+                            child: CircularProgressIndicator()
+                        ) : Builder(
+                            builder: (context) {
+                              final topOffset = MediaQuery.of(context).padding.top + 80;
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: topOffset),
+                                  Padding(
+                                    padding: DeepBreathPaddings.mainHorizontalPadding,
+                                    child: Text(
+                                      'Tap a country to explore its air quality monitoring stations.',
+                                      style: TextStyle(fontSize: 16, color: Colors.grey.shade800),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  CountriesGridView(
+                                    filteredCountries: _filteredCountries,
+                                  ),
+                                ],
+                              );
+                            },
+                        )
+                    )
+                ),
+                SafeArea(
+                    child: CountriesSearchBar(
+                      countries: _countries,
+                      onSearch: (filteredCountries) {
+                        setState(() {
+                          _filteredCountries = filteredCountries;
+                        });
+                      },
+                    )
                 )
-            ),
-            SafeArea(
-                child: CountriesSearchBar(
-                  countries: _countries,
-                  onSearch: (filteredCountries) {
-                    setState(() {
-                      _filteredCountries = filteredCountries;
-                    });
-                  },
-                )
-            )
-          ]
-      ),
+              ]
+          ),
     );
   }
 }
@@ -119,6 +138,7 @@ class CountriesGridView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.builder(
       shrinkWrap: true,
+      padding: DeepBreathPaddings.smallHorizontalPadding,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         crossAxisSpacing: 8.0,
@@ -127,47 +147,18 @@ class CountriesGridView extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: _filteredCountries.length,
       itemBuilder: (context, index) {
-        Country country = _filteredCountries[index];
-
+        final country = _filteredCountries[index];
         return GestureDetector(
-            onTap: () {
-              Get.toNamed("/location_screen",
-                  arguments: {
-                    "country": country
-                  });
-            },
-            child: CountryItem(country: country)
+          onTap: () => Get.toNamed("/location_screen", arguments: {"country": country}),
+          child: CountryItem(country: country),
         );
       },
     );
   }
 }
 
-class CountryErrorMessage extends StatelessWidget {
-  const CountryErrorMessage({
-    super.key,
-    required String errorMessage,
-  }) : _errorMessage = errorMessage;
-
-  final String _errorMessage;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: DeepBreathPaddings.mainAllPadding,
-        child: Text(
-            _errorMessage,
-            style: DeepBreathTextStyles.subtitle
-        )
-    );
-  }
-}
-
 class CountryItem extends StatelessWidget {
-  const CountryItem({
-    super.key,
-    required this.country,
-  });
+  const CountryItem({super.key, required this.country});
 
   final Country country;
 
@@ -176,22 +167,26 @@ class CountryItem extends StatelessWidget {
     return Column(
       children: [
         Padding(
-            padding: DeepBreathPaddings.smallBottomPadding,
-            child: Hero(
-                tag: country,
-                child: Flag.fromString(
-                  country.code,
-                  height: 69,
-                  width: 92,
-                  borderRadius: 4,
-                )
-            )
+          padding: DeepBreathPaddings.smallBottomPadding,
+          child: Hero(
+            tag: country,
+            child: Flag.fromString(
+              country.code,
+              height: 69,
+              width: 92,
+              borderRadius: 4,
+            ),
+          ),
         ),
-        Text(
+        Flexible(
+          child: Text(
             country.name,
             textAlign: TextAlign.center,
-            style: DeepBreathTextStyles.subtitle
-        )
+            style: DeepBreathTextStyles.subtitle,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ],
     );
   }

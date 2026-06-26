@@ -2,5 +2,6 @@ import 'package:deepbreath/location/domain/use_cases/get_location_by_country_id_
 
 class LocationUseCases {
   final GetLocationByCountryByIdUseCase getLocationByCountryByCodeUseCase;
+
   LocationUseCases(this.getLocationByCountryByCodeUseCase);
 }

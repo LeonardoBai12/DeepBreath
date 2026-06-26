@@ -1,5 +1,6 @@
 import 'package:deepbreath/countries/domain/model/country.dart';
 import 'package:deepbreath/location/util/location_search_bar.dart';
+import 'package:deepbreath/utils/error_view.dart';
 import 'package:deepbreath/utils/resource.dart';
 import 'package:deepbreath/utils/theme.dart';
 import 'package:flag/flag_widget.dart';
@@ -37,10 +38,7 @@ class _LocationScreenState extends State<LocationScreen> {
   }
 
   Future<void> _loadLocations() async {
-    final locationsStream = _locationController.getLocationByCountryByCode(
-        _country.code
-    );
-
+    final locationsStream = _locationController.getLocationsByCountryId(_country.id);
     await for (var resource in locationsStream) {
       if (resource is Success) {
         setState(() {
@@ -59,75 +57,109 @@ class _LocationScreenState extends State<LocationScreen> {
     }
   }
 
+  Future<void> _retry() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = "";
+      _locations = [];
+      _filteredLocations = [];
+    });
+    await _loadLocations();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          title: LocationsAppBarTitle(country: _country),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          backgroundColor: DeepBreathColors.appBarBackground,
-          flexibleSpace: const BlurEffect(),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: const Text('Locations', style: DeepBreathTextStyles.subtitle),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
         ),
-        body: Stack(
-            children: [
-              SingleChildScrollView(
+        backgroundColor: DeepBreathColors.appBarBackground,
+        flexibleSpace: const BlurEffect(),
+      ),
+      body: _errorMessage.isNotEmpty
+          ? ErrorView(onRetry: _retry)
+          : Stack(
+              children: [
+                SingleChildScrollView(
                   child: Builder(
-                      builder: (context) {
-                        if (_errorMessage.isNotEmpty) {
-                          return LocationsErrorMessage(
-                              errorMessage: _errorMessage);
-                        }
-
-                        return AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 500),
-                            child: _isLoading ? const Center(
-                                heightFactor: 15,
-                                child: CircularProgressIndicator()
-                            ) : Column(
-                                children: [
-                                  const SizedBox(height: 65),
-
-                                  Padding(
-                                    padding: DeepBreathPaddings
-                                        .smallHorizontalPadding,
-                                    child: LocationsListView(
-                                        filteredLocations: _filteredLocations
-                                    ),
-                                  ),
-                                ]
+                    builder: (context) {
+                      final topOffset = MediaQuery.of(context).padding.top + 80;
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: topOffset),
+                          _CountryHeader(country: _country),
+                          const SizedBox(height: 16),
+                          if (_isLoading)
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                              child: Center(child: CircularProgressIndicator()),
                             )
-                        );
-                      }
-                  )
-              ),
-
-              SafeArea(
-                child: LocationSearchBar(
-                  locations: _locations,
-                  onSearch: (filteredLocation) {
-                    setState(() {
-                      _filteredLocations = filteredLocation;
-                    });
-                  },
+                          else
+                            Padding(
+                              padding: DeepBreathPaddings.smallHorizontalPadding,
+                              child: LocationsListView(filteredLocations: _filteredLocations),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
-              )
-            ]
-        )
+                SafeArea(
+                  child: LocationSearchBar(
+                    locations: _locations,
+                    onSearch: (filtered) {
+                      setState(() => _filteredLocations = filtered);
+                    },
+                  ),
+                ),
+              ],
+            ),
+    );
+  }
+}
+
+class _CountryHeader extends StatelessWidget {
+  const _CountryHeader({required this.country});
+  final Country country;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: DeepBreathPaddings.mainHorizontalPadding,
+      child: Row(
+        children: [
+          Hero(
+            tag: country,
+            child: Flag.fromString(
+              country.code,
+              height: 48,
+              width: 72,
+              borderRadius: 6,
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Text(
+              country.name,
+              style: DeepBreathTextStyles.title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
 class LocationsListView extends StatelessWidget {
-  const LocationsListView({
-    super.key,
-    required List<Location> filteredLocations,
-  }) : _filteredLocations = filteredLocations;
+  const LocationsListView({super.key, required List<Location> filteredLocations})
+      : _filteredLocations = filteredLocations;
 
   final List<Location> _filteredLocations;
 
@@ -136,135 +168,129 @@ class LocationsListView extends StatelessWidget {
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
+      padding: EdgeInsets.zero,
       itemCount: _filteredLocations.length,
       itemBuilder: (context, index) {
-        Location location = _filteredLocations[index];
-        return GestureDetector(
-            onTap: () {
-              Get.toNamed(
-                  "/location_details_screen",
-                  arguments: { "location": location}
-              );
-            },
-            child: LocationItem(location: location)
+        final location = _filteredLocations[index];
+        return LocationItem(
+          location: location,
+          onTap: () => Get.toNamed('/location_details_screen', arguments: {'location': location}),
         );
       },
     );
   }
 }
 
-class LocationsErrorMessage extends StatelessWidget {
-  const LocationsErrorMessage({
-    super.key,
-    required String errorMessage,
-  }) : _errorMessage = errorMessage;
-
-  final String _errorMessage;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: DeepBreathPaddings.mainAllPadding,
-        child: Text(
-            _errorMessage,
-            style: DeepBreathTextStyles.subtitle
-        )
-    );
-  }
-}
-
-class LocationsAppBarTitle extends StatelessWidget {
-  const LocationsAppBarTitle({
-    super.key,
-    required Country country,
-  }) : _country = country;
-
-  final Country _country;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-        children: [
-          Padding(
-            padding: DeepBreathPaddings.mainEndPadding,
-            child: Hero(
-              tag: _country,
-              child: Flag.fromString(
-                _country.code,
-                height: 30,
-                width: 40,
-                borderRadius: 4,
-              ),
-            ),
-          ),
-          Flexible(
-              child: Text(
-                _country.name,
-                style: DeepBreathTextStyles.title,
-              )
-          )
-        ]
-    );
-  }
-}
-
 class LocationItem extends StatelessWidget {
-  const LocationItem({
-    super.key,
-    required this.location,
-  });
+  const LocationItem({super.key, required this.location, required this.onTap});
 
   final Location location;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return Card(
-        shadowColor: Colors.transparent,
-        surfaceTintColor: DeepBreathColors.cardBackground,
-        shape: DeepBreathTextShapes.cardBorder,
+      elevation: 0,
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: Theme.of(context).colorScheme.surfaceContainerLowest,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
         child: Padding(
-            padding: DeepBreathPaddings.mainAllPadding,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment
-                  .start,
-              children: [
-                Text(
-                    location.name,
-                    textAlign: TextAlign.start,
-                    style: DeepBreathTextStyles.subtitle
-                ),
-                location.city
-                    ?.trim()
-                    .isNotEmpty == true ?
-                Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "City: ",
-                        textAlign: TextAlign.start,
-                        style: DeepBreathTextStyles.mediumHeader,
-                      ),
-                      Text(
-                          location.city!,
-                          textAlign: TextAlign.start,
-                          style: DeepBreathTextStyles.bigCaption
-                      )
-                    ]
-                ) : const SizedBox(),
-                const Text(
-                  "Last time updated: ",
-                  textAlign: TextAlign.start,
-                  style: DeepBreathTextStyles.mediumHeader,
-                ),
-                Text(
-                    transformDateFormat(location.lastUpdated),
-                    textAlign: TextAlign.start,
-                    style: DeepBreathTextStyles.bigCaption
+          padding: DeepBreathPaddings.mainAllPadding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(location.name, style: DeepBreathTextStyles.subtitle),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  _StatusBadge(
+                    icon: location.isMobile ? Icons.directions_walk : Icons.location_on,
+                    label: location.isMobile ? 'Mobile' : 'Fixed',
+                    color: location.isMobile ? Colors.orange.shade700 : Colors.blue.shade700,
+                  ),
+                  const SizedBox(width: 6),
+                  _StatusBadge(
+                    icon: location.isMonitor ? Icons.verified : Icons.sensors,
+                    label: location.isMonitor ? 'Official' : 'Low-cost',
+                    color: location.isMonitor ? Colors.green.shade700 : Colors.grey.shade600,
+                  ),
+                ],
+              ),
+              if (location.owner?.isNotEmpty == true) ...[
+                const SizedBox(height: 8),
+                _MetaRow(icon: Icons.account_balance_outlined, text: location.owner!),
+              ],
+              if (location.city?.isNotEmpty == true) ...[
+                const SizedBox(height: 4),
+                _MetaRow(icon: Icons.location_city_outlined, text: location.city!),
+              ],
+              if (location.lastUpdated.isNotEmpty) ...[
+                const SizedBox(height: 4),
+                _MetaRow(
+                  icon: Icons.schedule,
+                  text: 'Updated ${transformDateFormat(location.lastUpdated)}',
                 ),
               ],
-            )
-        )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _StatusBadge extends StatelessWidget {
+  const _StatusBadge({required this.icon, required this.label, required this.color});
+
+  final IconData icon;
+  final String label;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 12, color: color),
+          const SizedBox(width: 4),
+          Text(label, style: TextStyle(fontSize: 11, color: color, fontWeight: FontWeight.w600)),
+        ],
+      ),
+    );
+  }
+}
+
+class _MetaRow extends StatelessWidget {
+  const _MetaRow({required this.icon, required this.text});
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, size: 13, color: Colors.grey.shade500),
+        const SizedBox(width: 6),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
     );
   }
 }

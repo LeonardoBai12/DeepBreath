@@ -31,10 +31,10 @@ class _LocationSearchBarState extends State<LocationSearchBar> {
       padding: DeepBreathPaddings.searchBarOuterPadding,
       child: SearchBar(
           hintText: "Search for a location...",
-          backgroundColor: MaterialStateColor.resolveWith((states) =>
+          backgroundColor: WidgetStateColor.resolveWith((states) =>
               DeepBreathColors.searchBarBackground
           ),
-          shadowColor: MaterialStateColor.resolveWith((states) =>
+          shadowColor: WidgetStateColor.resolveWith((states) =>
               DeepBreathColors.searchBarShadow
           ),
           padding: DeepBreathPaddings.searchBarInnerPadding,

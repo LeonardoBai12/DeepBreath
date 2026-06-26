@@ -1,3 +1,3 @@
 class CountriesConstants {
-  static const String countriesEndpoint = 'countries?sort_order=asc&limit=150&page=1';
+  static const String countriesEndpoint = 'countries?order_by=id&limit=200';
 }

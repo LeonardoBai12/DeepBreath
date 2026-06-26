@@ -12,9 +12,7 @@ class LocationBinding extends Bindings {
   void dependencies() {
     Get.lazyPut(() => LocationRemoteDataSource());
     Get.lazyPut<LocationRepository>(() => LocationRepositoryImpl(Get.find()));
-    Get.lazyPut(() => LocationUseCases(
-        GetLocationByCountryByIdUseCase(Get.find()),
-    ));
+    Get.lazyPut(() => LocationUseCases(GetLocationByCountryByIdUseCase(Get.find())));
     Get.lazyPut(() => LocationController(Get.find()));
   }
 }

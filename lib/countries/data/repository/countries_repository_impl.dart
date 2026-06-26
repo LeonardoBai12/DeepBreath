@@ -1,4 +1,5 @@
 import 'package:deepbreath/countries/data/remote/country_response.dart';
+import 'package:flutter/foundation.dart';
 import 'package:deepbreath/utils/resource.dart';
 
 import '../../domain/model/country.dart';
@@ -18,25 +19,8 @@ class CountriesRepositoryImpl implements CountriesRepository {
       yield Success(
           result.map((result) => Country.fromCountryResponse(result)).toList()
       );
-    } catch (e) {
-      yield Error(e.toString());
-    }
-
-    yield Loading(false);
-  }
-
-  @override
-  Stream<Resource<Country?>> getCountryDetails(String code) async* {
-    yield Loading(true);
-
-    try {
-      CountryResponse? result = await _dataSource.getCountryDetails(code);
-      if (result == null) {
-        yield Error("No country found for this code.");
-      } else {
-        yield Success(Country.fromCountryResponse(result));
-      }
-    } catch (e) {
+    } catch (e, st) {
+      debugPrint('CountriesRepository error: $e\n$st');
       yield Error(e.toString());
     }
 

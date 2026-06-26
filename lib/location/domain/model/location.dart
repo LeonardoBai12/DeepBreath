@@ -5,34 +5,53 @@ class Location {
   int id;
   String name;
   String? city;
-  String sensorManufacturer;
-  String sensorModel;
+  String? owner;
+  String? provider;
+  String? instrument;
+  String? timezone;
+  bool isMobile;
+  bool isMonitor;
   List<Parameter> parameters;
   String lastUpdated;
+  String firstUpdated;
+  double? latitude;
+  double? longitude;
 
   Location({
     required this.id,
     required this.name,
     required this.city,
-    required this.sensorManufacturer,
-    required this.sensorModel,
+    required this.owner,
+    required this.provider,
+    required this.instrument,
+    required this.timezone,
+    required this.isMobile,
+    required this.isMonitor,
     required this.parameters,
     required this.lastUpdated,
+    required this.firstUpdated,
+    required this.latitude,
+    required this.longitude,
   });
 
-  factory Location.fromLocationResponse(LocationResponse response) {
+  factory Location.fromLocationResponse(LocationResponse r) {
     return Location(
-        id: response.id,
-        name: response.name ?? "",
-        city: response.city,
-        sensorManufacturer: response.manufacturers.first.manufacturerName,
-        sensorModel: response.manufacturers.first.modelName,
-        parameters: List<Parameter>.from(
-          response.parameters.map((x) =>
-            Parameter.fromParameterResponse(x)
-          )
-        ),
-        lastUpdated: response.lastUpdated
+      id: r.id,
+      name: r.name ?? '',
+      city: r.city,
+      owner: r.owner,
+      provider: r.provider,
+      instrument: r.instrument,
+      timezone: r.timezone,
+      isMobile: r.isMobile,
+      isMonitor: r.isMonitor,
+      parameters: r.parameters
+          .map((x) => Parameter.fromParameterResponse(x))
+          .toList(),
+      lastUpdated: r.lastUpdated,
+      firstUpdated: r.firstUpdated,
+      latitude: r.latitude,
+      longitude: r.longitude,
     );
   }
 }

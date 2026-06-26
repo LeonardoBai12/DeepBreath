@@ -92,18 +92,16 @@ class _LocationScreenState extends State<LocationScreen> {
                       )),
                       _CountryHeader(country: _country),
                       const SizedBox(height: 16),
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 500),
-                        child: _isLoading
-                            ? const Padding(
-                                padding: EdgeInsets.only(top: 48),
-                                child: Center(child: CircularProgressIndicator()),
-                              )
-                            : Padding(
-                                padding: DeepBreathPaddings.smallHorizontalPadding,
-                                child: LocationsListView(filteredLocations: _filteredLocations),
-                              ),
-                      ),
+                      if (_isLoading)
+                        const Padding(
+                          padding: EdgeInsets.only(top: 48),
+                          child: Center(child: CircularProgressIndicator()),
+                        )
+                      else
+                        Padding(
+                          padding: DeepBreathPaddings.smallHorizontalPadding,
+                          child: LocationsListView(filteredLocations: _filteredLocations),
+                        ),
                     ],
                   ),
                 ),

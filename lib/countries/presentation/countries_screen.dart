@@ -1,3 +1,4 @@
+import 'package:deepbreath/utils/error_view.dart';
 import 'package:deepbreath/utils/theme.dart';
 import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,16 @@ class _CountriesScreenState extends State<CountriesScreen> {
     }
   }
 
+  Future<void> _retry() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = "";
+      _countries = [];
+      _filteredCountries = [];
+    });
+    await _loadCountries();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,44 +76,38 @@ class _CountriesScreenState extends State<CountriesScreen> {
         backgroundColor: DeepBreathColors.appBarBackground,
         flexibleSpace: const BlurEffect(),
       ),
-      body: Stack(
-          children: [
-            SingleChildScrollView(
-                child: Builder(
-                    builder: (context) {
-                      if (_errorMessage.isNotEmpty) {
-                        return CountryErrorMessage(errorMessage: _errorMessage);
-                      }
-
-                      return AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 1000),
-                          child: _isLoading ? const Center(
-                              heightFactor: 15,
-                              child: CircularProgressIndicator()
-                          ) : Column(
-                              children: [
-                                const SizedBox(height: 70),
-                                CountriesGridView(
-                                    filteredCountries: _filteredCountries
-                                ),
-                              ]
-                          )
-                      );
-                    }
+      body: _errorMessage.isNotEmpty
+          ? ErrorView(onRetry: _retry)
+          : Stack(
+              children: [
+                SingleChildScrollView(
+                    child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 1000),
+                        child: _isLoading ? const Center(
+                            heightFactor: 15,
+                            child: CircularProgressIndicator()
+                        ) : Column(
+                            children: [
+                              const SizedBox(height: 70),
+                              CountriesGridView(
+                                  filteredCountries: _filteredCountries
+                              ),
+                            ]
+                        )
+                    )
+                ),
+                SafeArea(
+                    child: CountriesSearchBar(
+                      countries: _countries,
+                      onSearch: (filteredCountries) {
+                        setState(() {
+                          _filteredCountries = filteredCountries;
+                        });
+                      },
+                    )
                 )
-            ),
-            SafeArea(
-                child: CountriesSearchBar(
-                  countries: _countries,
-                  onSearch: (filteredCountries) {
-                    setState(() {
-                      _filteredCountries = filteredCountries;
-                    });
-                  },
-                )
-            )
-          ]
-      ),
+              ]
+          ),
     );
   }
 }
@@ -119,80 +124,62 @@ class CountriesGridView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.builder(
       shrinkWrap: true,
+      padding: DeepBreathPaddings.smallHorizontalPadding,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 8.0,
-        mainAxisSpacing: 8.0,
+        crossAxisCount: 2,
+        crossAxisSpacing: 10.0,
+        mainAxisSpacing: 10.0,
+        childAspectRatio: 1.1,
       ),
       physics: const NeverScrollableScrollPhysics(),
       itemCount: _filteredCountries.length,
       itemBuilder: (context, index) {
-        Country country = _filteredCountries[index];
-
+        final country = _filteredCountries[index];
         return GestureDetector(
-            onTap: () {
-              Get.toNamed("/location_screen",
-                  arguments: {
-                    "country": country
-                  });
-            },
-            child: CountryItem(country: country)
+          onTap: () => Get.toNamed("/location_screen", arguments: {"country": country}),
+          child: CountryItem(country: country),
         );
       },
     );
   }
 }
 
-class CountryErrorMessage extends StatelessWidget {
-  const CountryErrorMessage({
-    super.key,
-    required String errorMessage,
-  }) : _errorMessage = errorMessage;
-
-  final String _errorMessage;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: DeepBreathPaddings.mainAllPadding,
-        child: Text(
-            _errorMessage,
-            style: DeepBreathTextStyles.subtitle
-        )
-    );
-  }
-}
-
 class CountryItem extends StatelessWidget {
-  const CountryItem({
-    super.key,
-    required this.country,
-  });
+  const CountryItem({super.key, required this.country});
 
   final Country country;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-            padding: DeepBreathPaddings.smallBottomPadding,
-            child: Hero(
-                tag: country,
-                child: Flag.fromString(
-                  country.code,
-                  height: 69,
-                  width: 92,
-                  borderRadius: 4,
-                )
-            )
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      color: Theme.of(context).colorScheme.surfaceContainerLowest,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Hero(
+              tag: country,
+              child: Flag.fromString(
+                country.code,
+                height: 72,
+                width: 108,
+                borderRadius: 6,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              country.name,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 0.1),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
         ),
-        Text(
-            country.name,
-            textAlign: TextAlign.center,
-            style: DeepBreathTextStyles.subtitle
-        )
-      ],
+      ),
     );
   }
 }

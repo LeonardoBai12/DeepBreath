@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 
 class LocationRemoteDataSource {
   Future<List<LocationResponse>> getLocationsByCountryId(int countryId) async {
-    final url = '${Constants.baseUrlV3}${LocationConstants.locationEndpoint}?country_id=$countryId&limit=200';
+    final url = '${Constants.baseUrlV3}${LocationConstants.locationEndpoint}?countries_id=$countryId&limit=200';
     debugPrint('LocationRemoteDataSource: fetching $url');
     final response = await http.get(
       Uri.parse(url),

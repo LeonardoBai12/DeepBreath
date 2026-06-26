@@ -3,7 +3,6 @@ import 'package:deepbreath/location/util/location_search_bar.dart';
 import 'package:deepbreath/utils/error_view.dart';
 import 'package:deepbreath/utils/resource.dart';
 import 'package:deepbreath/utils/theme.dart';
-import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -72,7 +71,7 @@ class _LocationScreenState extends State<LocationScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: LocationsAppBarTitle(country: _country),
+        title: const Text('Locations', style: DeepBreathTextStyles.subtitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -133,28 +132,6 @@ class LocationsListView extends StatelessWidget {
           onTap: () => Get.toNamed('/location_details_screen', arguments: {'location': location}),
         );
       },
-    );
-  }
-}
-
-class LocationsAppBarTitle extends StatelessWidget {
-  const LocationsAppBarTitle({super.key, required Country country}) : _country = country;
-
-  final Country _country;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Padding(
-          padding: DeepBreathPaddings.mainEndPadding,
-          child: Hero(
-            tag: _country,
-            child: Flag.fromString(_country.code, height: 30, width: 40, borderRadius: 4),
-          ),
-        ),
-        Flexible(child: Text(_country.name, style: DeepBreathTextStyles.title)),
-      ],
     );
   }
 }

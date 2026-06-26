@@ -87,8 +87,17 @@ class _CountriesScreenState extends State<CountriesScreen> {
                             heightFactor: 15,
                             child: CircularProgressIndicator()
                         ) : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 70),
+                              const SizedBox(height: 128),
+                              Padding(
+                                padding: DeepBreathPaddings.mainHorizontalPadding,
+                                child: Text(
+                                  'Tap a country to explore its air quality monitoring stations.',
+                                  style: TextStyle(fontSize: 13, color: Colors.grey.shade500),
+                                ),
+                              ),
+                              const SizedBox(height: 12),
                               CountriesGridView(
                                   filteredCountries: _filteredCountries
                               ),

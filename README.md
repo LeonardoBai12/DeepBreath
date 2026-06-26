@@ -1,28 +1,55 @@
-# Deepbreath
+# DeepBreath
 
-Deepbreath is a Flutter application designed to help users monitor air quality in their location. It leverages various technologies to provide real-time data and user-friendly features, offering a comprehensive tool for environmental awareness and health.
+DeepBreath is a Flutter app for exploring air quality monitoring stations around the world, powered by the [OpenAQ API v3](https://docs.openaq.org/).
 
-## Description
+## Features
 
-Deepbreath offers the following features:
-* Retrieve real-time air quality data.
-* Display air quality metrics based on user location.
-* Visualize air quality trends with shared element animations.
+- Browse countries and their air quality monitoring stations
+- View station details: owner, provider, instrument, timezone, coordinates, and active period
+- See which pollutants each station monitors (PM2.5, NO₂, O₃, CO, SO₂, and more)
+- Tap any sensor chip to load its latest measurement value on demand
+- Search and filter countries and stations by name
+- Shared element (Hero) animations between screens
 
-## Technologies
+## Getting Started
 
-The application is built using the following technologies:
+### Prerequisites
 
-* [HTTP](https://pub.dev/packages/http) for making HTTP requests to APIs.
-* [Geolocator](https://pub.dev/packages/geolocator) for accessing device geolocation.
-* [Get](https://pub.dev/packages/get) for state management.
-* [Flag](https://pub.dev/packages/flag) for displaying flag images.
-* [Hero Animation](https://pub.dev/packages/hero_animation) for creating shared element animations.
+- Flutter SDK ≥ 3.5.0
+- An [OpenAQ API key](https://docs.openaq.org/docs/getting-started)
 
-## APIs
+### Setup
 
-Deepbreath utilizes the [OpenAQ API](https://docs.openaq.org/docs) to fetch and display air quality data from various locations worldwide.
+1. Clone the repository and install dependencies:
+   ```bash
+   flutter pub get
+   ```
 
-## Demonstration
+2. Create the secrets file (gitignored):
+   ```bash
+   cp lib/utils/api_secrets.dart.example lib/utils/api_secrets.dart
+   ```
+   Then replace the placeholder with your OpenAQ API key.
 
-You can watch a demo of the application's features on this [YouTube Video](https://www.youtube.com/watch?v=ahIWxjms8Ts) (PT-BR).
+3. Run the app:
+   ```bash
+   flutter run
+   ```
+
+## Tech Stack
+
+| Library | Purpose |
+|---|---|
+| [get](https://pub.dev/packages/get) | State management, DI, and navigation |
+| [http](https://pub.dev/packages/http) | REST API calls |
+| [flag](https://pub.dev/packages/flag) | Country flag widgets |
+| [geolocator](https://pub.dev/packages/geolocator) | Device geolocation |
+| [intl](https://pub.dev/packages/intl) | Date formatting |
+
+## Architecture
+
+Clean Architecture organized into two feature modules (`countries`, `location`), each with its own `data`, `domain`, and `presentation` layers. GetX handles dependency injection via `Binding` classes and named route navigation. Controllers are stateless — they expose `Stream<Resource<T>>` methods that screens consume with `await for`.
+
+## Demo
+
+Watch a walkthrough on [YouTube](https://www.youtube.com/watch?v=ahIWxjms8Ts) (PT-BR).

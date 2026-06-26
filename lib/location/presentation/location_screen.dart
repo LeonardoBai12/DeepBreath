@@ -168,6 +168,7 @@ class LocationsListView extends StatelessWidget {
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
+      padding: EdgeInsets.zero,
       itemCount: _filteredLocations.length,
       itemBuilder: (context, index) {
         final location = _filteredLocations[index];

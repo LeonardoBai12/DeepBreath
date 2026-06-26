@@ -50,6 +50,10 @@ DeepBreath is a Flutter app for exploring air quality monitoring stations around
 
 Clean Architecture organized into two feature modules (`countries`, `location`), each with its own `data`, `domain`, and `presentation` layers. GetX handles dependency injection via `Binding` classes and named route navigation. Controllers are stateless — they expose `Stream<Resource<T>>` methods that screens consume with `await for`.
 
+## Video
+
+https://github.com/user-attachments/assets/d7ae6058-f7a7-4b1c-a860-15080b095006
+
 ## Demo
 
 Watch a walkthrough on [YouTube](https://www.youtube.com/watch?v=ahIWxjms8Ts) (PT-BR).

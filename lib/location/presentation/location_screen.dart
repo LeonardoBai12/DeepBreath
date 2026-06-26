@@ -95,7 +95,10 @@ class _LocationScreenState extends State<LocationScreen> {
                       AnimatedSwitcher(
                         duration: const Duration(milliseconds: 500),
                         child: _isLoading
-                            ? const Center(heightFactor: 10, child: CircularProgressIndicator())
+                            ? const Padding(
+                                padding: EdgeInsets.only(top: 48),
+                                child: Center(child: CircularProgressIndicator()),
+                              )
                             : Padding(
                                 padding: DeepBreathPaddings.smallHorizontalPadding,
                                 child: LocationsListView(filteredLocations: _filteredLocations),

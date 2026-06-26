@@ -85,21 +85,21 @@ class _LocationScreenState extends State<LocationScreen> {
           : Stack(
               children: [
                 SingleChildScrollView(
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 500),
-                    child: _isLoading
-                        ? const Center(heightFactor: 15, child: CircularProgressIndicator())
-                        : Column(
-                            children: [
-                              const SizedBox(height: 65),
-                              _CountryHeader(country: _country),
-                              const SizedBox(height: 16),
-                              Padding(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 65),
+                      _CountryHeader(country: _country),
+                      const SizedBox(height: 16),
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 500),
+                        child: _isLoading
+                            ? const Center(heightFactor: 10, child: CircularProgressIndicator())
+                            : Padding(
                                 padding: DeepBreathPaddings.smallHorizontalPadding,
                                 child: LocationsListView(filteredLocations: _filteredLocations),
                               ),
-                            ],
-                          ),
+                      ),
+                    ],
                   ),
                 ),
                 SafeArea(

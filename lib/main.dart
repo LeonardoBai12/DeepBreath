@@ -1,6 +1,7 @@
 import 'package:deepbreath/location/di/location_binding.dart';
 import 'package:deepbreath/location/presentation/location_details_screen.dart';
 import 'package:deepbreath/location/presentation/location_screen.dart';
+import 'package:deepbreath/sensor/di/sensor_binding.dart';
 import 'package:deepbreath/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -42,6 +43,7 @@ class DeepBreathApp extends StatelessWidget {
           name: "/location_details_screen",
           transition: Transition.cupertino,
           page: () => const LocationDetailsScreen(),
+          binding: SensorBinding(),
         ),
       ],
     );

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:deepbreath/location/data/remote/latest_measurement_response.dart';
 import 'package:deepbreath/location/data/remote/location_response.dart';
 import 'package:deepbreath/location/util/location_constants.dart';
 import 'package:deepbreath/utils/api_secrets.dart';
@@ -31,27 +30,6 @@ class LocationRemoteDataSource {
       }
     } else {
       throw Exception('Failed to load locations: ${response.statusCode} — ${utf8.decode(response.bodyBytes)}');
-    }
-  }
-
-  Future<List<LatestMeasurementResponse>> getLatestMeasurements(int locationId) async {
-    final url = '${Constants.baseUrlV3}locations/$locationId/latest';
-    debugPrint('LocationRemoteDataSource: fetching $url');
-    final response = await http.get(
-      Uri.parse(url),
-      headers: {'X-API-Key': ApiSecrets.openAqApiKey},
-    );
-    if (response.statusCode == 200) {
-      final jsonData = json.decode(utf8.decode(response.bodyBytes));
-      if (jsonData['results'] != null) {
-        return List<LatestMeasurementResponse>.from(
-          jsonData['results'].map((r) => LatestMeasurementResponse.fromJson(r as Map<String, dynamic>)),
-        );
-      } else {
-        throw Exception('Invalid JSON format or missing "results" key');
-      }
-    } else {
-      throw Exception('Failed to load latest measurements: ${response.statusCode} — ${utf8.decode(response.bodyBytes)}');
     }
   }
 }

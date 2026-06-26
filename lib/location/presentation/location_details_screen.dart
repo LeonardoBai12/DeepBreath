@@ -1,3 +1,4 @@
+import 'package:deepbreath/location/domain/model/latest_measurement.dart';
 import 'package:deepbreath/location/domain/model/location.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,7 @@ import '../../utils/blur_effect.dart';
 import '../../utils/theme.dart';
 import '../domain/model/parameter.dart';
 import '../util/string_helper.dart';
+import 'location_controller.dart';
 
 class LocationDetailsScreen extends StatefulWidget {
   const LocationDetailsScreen({super.key});
@@ -16,11 +18,24 @@ class LocationDetailsScreen extends StatefulWidget {
 
 class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
   late final Location _location;
+  late final LocationController _locationController;
 
   @override
   void initState() {
     super.initState();
     _location = Get.arguments["location"];
+    _locationController = Get.find<LocationController>();
+  }
+
+  void _showSensorDialog(Parameter parameter) {
+    showDialog(
+      context: context,
+      builder: (_) => _SensorDialog(
+        parameter: parameter,
+        locationId: _location.id,
+        controller: _locationController,
+      ),
+    );
   }
 
   @override
@@ -50,8 +65,16 @@ class _LocationDetailsScreenState extends State<LocationDetailsScreen> {
                 _InfoCard(location: _location),
                 const SizedBox(height: 20),
                 _SectionHeader(label: 'Sensors'),
+                const SizedBox(height: 4),
+                Text(
+                  'Tap a sensor to see its latest reading.',
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
+                ),
                 const SizedBox(height: 8),
-                _SensorsWrap(parameters: _location.parameters),
+                _SensorsWrap(
+                  parameters: _location.parameters,
+                  onTap: _showSensorDialog,
+                ),
               ],
             ),
           ),
@@ -219,10 +242,11 @@ class _InfoRow extends StatelessWidget {
 }
 
 class _SensorsWrap extends StatelessWidget {
-  const _SensorsWrap({required this.parameters});
+  const _SensorsWrap({required this.parameters, required this.onTap});
   final List<Parameter> parameters;
+  final void Function(Parameter) onTap;
 
-  static Color _colorFor(String name) {
+  static Color colorFor(String name) {
     final n = name.toLowerCase();
     if (n.contains('pm')) return Colors.orange.shade700;
     if (n.contains('no')) return Colors.red.shade600;
@@ -244,27 +268,137 @@ class _SensorsWrap extends StatelessWidget {
       runSpacing: 8,
       children: parameters.map((p) {
         final label = p.displayName.isNotEmpty ? p.displayName : p.name;
-        final color = _colorFor(p.name);
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: color.withValues(alpha: 0.4)),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(width: 8, height: 8, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
-              const SizedBox(width: 6),
-              Text(
-                '$label · ${p.units}',
-                style: TextStyle(fontSize: 12, color: color, fontWeight: FontWeight.w600),
-              ),
-            ],
+        final color = colorFor(p.name);
+        return GestureDetector(
+          onTap: () => onTap(p),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: color.withValues(alpha: 0.4)),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(width: 8, height: 8, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+                const SizedBox(width: 6),
+                Text(
+                  '$label · ${p.units}',
+                  style: TextStyle(fontSize: 12, color: color, fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
           ),
         );
       }).toList(),
+    );
+  }
+}
+
+class _SensorDialog extends StatefulWidget {
+  const _SensorDialog({
+    required this.parameter,
+    required this.locationId,
+    required this.controller,
+  });
+
+  final Parameter parameter;
+  final int locationId;
+  final LocationController controller;
+
+  @override
+  State<_SensorDialog> createState() => _SensorDialogState();
+}
+
+class _SensorDialogState extends State<_SensorDialog> {
+  List<LatestMeasurement>? _measurements;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetch();
+  }
+
+  Future<void> _fetch() async {
+    try {
+      final data = await widget.controller.getLatestMeasurements(widget.locationId);
+      if (mounted) setState(() => _measurements = data);
+    } catch (e) {
+      if (mounted) setState(() => _error = e.toString());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final label = widget.parameter.displayName.isNotEmpty
+        ? widget.parameter.displayName
+        : widget.parameter.name;
+    final color = _SensorsWrap.colorFor(widget.parameter.name);
+
+    LatestMeasurement? match;
+    if (_measurements != null) {
+      try {
+        match = _measurements!.firstWhere((m) => m.sensorId == widget.parameter.sensorId);
+      } catch (_) {}
+    }
+
+    return AlertDialog(
+      title: Row(
+        children: [
+          Container(
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 8),
+          Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        ],
+      ),
+      content: _buildContent(match, color),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Close'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildContent(LatestMeasurement? match, Color color) {
+    if (_error != null) {
+      return Text(
+        'Could not load latest reading.',
+        style: TextStyle(color: Colors.grey.shade600),
+      );
+    }
+    if (_measurements == null) {
+      return const SizedBox(
+        height: 64,
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+    if (match == null) {
+      return Text(
+        'No recent reading available.',
+        style: TextStyle(color: Colors.grey.shade600),
+      );
+    }
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '${match.value} ${widget.parameter.units}',
+          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: color),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          transformDateFormat(match.datetimeUtc),
+          style: TextStyle(fontSize: 13, color: Colors.grey.shade500),
+        ),
+      ],
     );
   }
 }

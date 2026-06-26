@@ -1,8 +1,9 @@
 import 'package:deepbreath/location/data/remote/location_remote_data_source.dart';
-import 'package:flutter/foundation.dart';
 import 'package:deepbreath/location/data/remote/location_response.dart';
+import 'package:deepbreath/location/domain/model/latest_measurement.dart';
 import 'package:deepbreath/location/domain/model/location.dart';
 import 'package:deepbreath/utils/resource.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../domain/repository/location_repository.dart';
 
@@ -25,5 +26,16 @@ class LocationRepositoryImpl implements LocationRepository {
     }
 
     yield Loading(false);
+  }
+
+  @override
+  Future<List<LatestMeasurement>> getLatestMeasurements(int locationId) async {
+    try {
+      final responses = await _dataSource.getLatestMeasurements(locationId);
+      return responses.map((r) => LatestMeasurement.fromResponse(r)).toList();
+    } catch (e, st) {
+      debugPrint('LocationRepository error: $e\n$st');
+      rethrow;
+    }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:deepbreath/location/domain/use_cases/get_latest_measurements_use_case.dart';
 import 'package:deepbreath/location/domain/use_cases/get_location_by_country_id_use_case.dart';
 import 'package:get/get.dart';
 
@@ -14,6 +15,7 @@ class LocationBinding extends Bindings {
     Get.lazyPut<LocationRepository>(() => LocationRepositoryImpl(Get.find()));
     Get.lazyPut(() => LocationUseCases(
         GetLocationByCountryByIdUseCase(Get.find()),
+        GetLatestMeasurementsUseCase(Get.find()),
     ));
     Get.lazyPut(() => LocationController(Get.find()));
   }

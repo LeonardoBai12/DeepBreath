@@ -89,12 +89,12 @@ class _CountriesScreenState extends State<CountriesScreen> {
                         ) : Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 180),
+                              const SizedBox(height: 150),
                               Padding(
                                 padding: DeepBreathPaddings.mainHorizontalPadding,
                                 child: Text(
                                   'Tap a country to explore its air quality monitoring stations.',
-                                  style: TextStyle(fontSize: 13, color: Colors.grey.shade500),
+                                  style: TextStyle(fontSize: 16, color: Colors.grey.shade800),
                                 ),
                               ),
                               const SizedBox(height: 12),
@@ -135,10 +135,9 @@ class CountriesGridView extends StatelessWidget {
       shrinkWrap: true,
       padding: DeepBreathPaddings.smallHorizontalPadding,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 10.0,
-        mainAxisSpacing: 10.0,
-        childAspectRatio: 1.1,
+        crossAxisCount: 3,
+        crossAxisSpacing: 8.0,
+        mainAxisSpacing: 8.0,
       ),
       physics: const NeverScrollableScrollPhysics(),
       itemCount: _filteredCountries.length,

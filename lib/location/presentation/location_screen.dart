@@ -3,6 +3,7 @@ import 'package:deepbreath/location/util/location_search_bar.dart';
 import 'package:deepbreath/utils/error_view.dart';
 import 'package:deepbreath/utils/resource.dart';
 import 'package:deepbreath/utils/theme.dart';
+import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -91,6 +92,8 @@ class _LocationScreenState extends State<LocationScreen> {
                         : Column(
                             children: [
                               const SizedBox(height: 65),
+                              _CountryHeader(country: _country),
+                              const SizedBox(height: 16),
                               Padding(
                                 padding: DeepBreathPaddings.smallHorizontalPadding,
                                 child: LocationsListView(filteredLocations: _filteredLocations),
@@ -109,6 +112,40 @@ class _LocationScreenState extends State<LocationScreen> {
                 ),
               ],
             ),
+    );
+  }
+}
+
+class _CountryHeader extends StatelessWidget {
+  const _CountryHeader({required this.country});
+  final Country country;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: DeepBreathPaddings.mainHorizontalPadding,
+      child: Row(
+        children: [
+          Hero(
+            tag: country,
+            child: Flag.fromString(
+              country.code,
+              height: 48,
+              width: 72,
+              borderRadius: 6,
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Text(
+              country.name,
+              style: DeepBreathTextStyles.title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

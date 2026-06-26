@@ -8,7 +8,7 @@ class LocationController extends GetxController {
   final LocationUseCases _useCases;
   LocationController(this._useCases);
 
-  Stream<Resource<List<Location>>> getLocationByCountryByCode(String code) {
-    return _useCases.getLocationByCountryByCodeUseCase.execute(code);
+  Stream<Resource<List<Location>>> getLocationsByCountryId(int countryId) {
+    return _useCases.getLocationByCountryByCodeUseCase.execute(countryId);
   }
 }

@@ -1,5 +1,6 @@
 import 'package:deepbreath/countries/utils/countries_constants.dart';
 
+import '../../../utils/api_secrets.dart';
 import '../../../utils/constants.dart';
 import 'country_response.dart';
 import 'dart:convert';
@@ -7,9 +8,10 @@ import 'package:http/http.dart' as http;
 
 class CountriesRemoteDataSource {
   Future<List<CountryResponse>> getCountries() async {
-    final response = await http.get(Uri.parse(
-        Constants.baseUrlV2 + CountriesConstants.countriesEndpoint
-    ));
+    final response = await http.get(
+      Uri.parse(Constants.baseUrlV3 + CountriesConstants.countriesEndpoint),
+      headers: {'X-API-Key': ApiSecrets.openAqApiKey},
+    );
 
     if (response.statusCode == 200) {
       final jsonData = json.decode(utf8.decode(response.bodyBytes));
@@ -25,11 +27,7 @@ class CountriesRemoteDataSource {
         throw Exception('Invalid JSON format or missing "results" key');
       }
     } else {
-      throw Exception('Failed to load countries');
+      throw Exception('Failed to load countries: ${response.statusCode} — ${utf8.decode(response.bodyBytes)}');
     }
-  }
-
-  Future<CountryResponse?> getCountryDetails(String code) async {
-    return null;
   }
 }

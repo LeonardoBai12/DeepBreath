@@ -1,3 +1,26 @@
+# IDE
+.idea/
+*.iml
+
+# Android
+android/.kotlin/
+android/app/.cxx/
+android/app/build/
+android/local.properties
+
+# macOS
+.DS_Store
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/ServiceDefinitions.json
+ios/Runner/GeneratedPluginRegistrant.*
+
 # See https://www.dartlang.org/guides/libraries/private-files
 
 # Files and directories created by pub
@@ -13,6 +36,9 @@ doc/api/
 
 # dotenv environment variables file
 .env*
+
+# API secrets — never commit the real file
+lib/utils/api_secrets.dart
 
 # Avoid committing generated Javascript files:
 *.dart.js

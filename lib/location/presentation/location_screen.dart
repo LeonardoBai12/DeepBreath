@@ -87,7 +87,9 @@ class _LocationScreenState extends State<LocationScreen> {
                 SingleChildScrollView(
                   child: Column(
                     children: [
-                      const SizedBox(height: 65),
+                      Builder(builder: (context) => SizedBox(
+                        height: MediaQuery.of(context).padding.top + 80,
+                      )),
                       _CountryHeader(country: _country),
                       const SizedBox(height: 16),
                       AnimatedSwitcher(

@@ -86,22 +86,27 @@ class _CountriesScreenState extends State<CountriesScreen> {
                         child: _isLoading ? const Center(
                             heightFactor: 15,
                             child: CircularProgressIndicator()
-                        ) : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 150),
-                              Padding(
-                                padding: DeepBreathPaddings.mainHorizontalPadding,
-                                child: Text(
-                                  'Tap a country to explore its air quality monitoring stations.',
-                                  style: TextStyle(fontSize: 16, color: Colors.grey.shade800),
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              CountriesGridView(
-                                  filteredCountries: _filteredCountries
-                              ),
-                            ]
+                        ) : Builder(
+                            builder: (context) {
+                              final topOffset = MediaQuery.of(context).padding.top + 80;
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: topOffset),
+                                  Padding(
+                                    padding: DeepBreathPaddings.mainHorizontalPadding,
+                                    child: Text(
+                                      'Tap a country to explore its air quality monitoring stations.',
+                                      style: TextStyle(fontSize: 16, color: Colors.grey.shade800),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  CountriesGridView(
+                                    filteredCountries: _filteredCountries,
+                                  ),
+                                ],
+                              );
+                            },
                         )
                     )
                 ),

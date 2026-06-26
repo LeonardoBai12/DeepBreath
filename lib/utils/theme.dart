@@ -16,8 +16,8 @@ class DeepBreathPaddings {
   static const EdgeInsets mainAllPadding = EdgeInsets.all(mainAxis);
   static const EdgeInsets dataPadding = EdgeInsets.fromLTRB(mainAxis, mainAxis / 2, mainAxis, mainAxis / 2);
   static const EdgeInsets searchBarOuterPadding = EdgeInsets.fromLTRB(mainAxis, 0, mainAxis, mainAxis);
-  static const MaterialStatePropertyAll<EdgeInsets> searchBarInnerPadding =
-  MaterialStatePropertyAll<EdgeInsets>(
+  static const WidgetStatePropertyAll<EdgeInsets> searchBarInnerPadding =
+  WidgetStatePropertyAll<EdgeInsets>(
       EdgeInsets.symmetric(horizontal: mainAxis)
   );
   static const EdgeInsets smallHorizontalPadding = EdgeInsets.symmetric(horizontal: mainAxis / 2);

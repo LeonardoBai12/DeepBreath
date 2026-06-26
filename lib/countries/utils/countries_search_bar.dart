@@ -31,10 +31,10 @@ class _CountriesSearchBarState extends State<CountriesSearchBar> {
       padding: DeepBreathPaddings.searchBarOuterPadding,
       child: SearchBar(
           hintText: "Search for a country...",
-          backgroundColor: MaterialStateColor.resolveWith((states) =>
+          backgroundColor: WidgetStateColor.resolveWith((states) =>
           DeepBreathColors.searchBarBackground
           ),
-          shadowColor: MaterialStateColor.resolveWith((states) =>
+          shadowColor: WidgetStateColor.resolveWith((states) =>
           DeepBreathColors.searchBarShadow
           ),
           padding: DeepBreathPaddings.searchBarInnerPadding,

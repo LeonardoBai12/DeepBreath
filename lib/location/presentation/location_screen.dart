@@ -85,30 +85,28 @@ class _LocationScreenState extends State<LocationScreen> {
           : Stack(
               children: [
                 SingleChildScrollView(
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 500),
-                    child: _isLoading
-                        ? const Center(
-                            heightFactor: 15,
-                            child: CircularProgressIndicator(),
-                          )
-                        : Builder(
-                            builder: (context) {
-                              final topOffset = MediaQuery.of(context).padding.top + 80;
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(height: topOffset),
-                                  _CountryHeader(country: _country),
-                                  const SizedBox(height: 16),
-                                  Padding(
-                                    padding: DeepBreathPaddings.smallHorizontalPadding,
-                                    child: LocationsListView(filteredLocations: _filteredLocations),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
+                  child: Builder(
+                    builder: (context) {
+                      final topOffset = MediaQuery.of(context).padding.top + 80;
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: topOffset),
+                          _CountryHeader(country: _country),
+                          const SizedBox(height: 16),
+                          if (_isLoading)
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                              child: Center(child: CircularProgressIndicator()),
+                            )
+                          else
+                            Padding(
+                              padding: DeepBreathPaddings.smallHorizontalPadding,
+                              child: LocationsListView(filteredLocations: _filteredLocations),
+                            ),
+                        ],
+                      );
+                    },
                   ),
                 ),
                 SafeArea(

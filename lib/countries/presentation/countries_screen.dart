@@ -89,7 +89,7 @@ class _CountriesScreenState extends State<CountriesScreen> {
                         ) : Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 128),
+                              const SizedBox(height: 180),
                               Padding(
                                 padding: DeepBreathPaddings.mainHorizontalPadding,
                                 child: Text(

@@ -93,10 +93,7 @@ class _LocationScreenState extends State<LocationScreen> {
                       _CountryHeader(country: _country),
                       const SizedBox(height: 16),
                       if (_isLoading)
-                        const Padding(
-                          padding: EdgeInsets.only(top: 48),
-                          child: Center(child: CircularProgressIndicator()),
-                        )
+                        const CircularProgressIndicator()
                       else
                         Padding(
                           padding: DeepBreathPaddings.smallHorizontalPadding,
